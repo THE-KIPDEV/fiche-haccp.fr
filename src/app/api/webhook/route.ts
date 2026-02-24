@@ -42,6 +42,26 @@ export async function POST(request: NextRequest) {
             [subscriptionId, userId]
           );
 
+          // Create first invoice record
+          try {
+            const year = new Date().getFullYear();
+            const lastInv = await query<Array<{ invoice_number: string }>>(
+              "SELECT invoice_number FROM invoices ORDER BY id DESC LIMIT 1"
+            );
+            let nextNum = 1;
+            if (lastInv.length > 0) {
+              const match = lastInv[0].invoice_number.match(/(\d+)$/);
+              if (match) nextNum = parseInt(match[1]) + 1;
+            }
+            const invoiceNumber = `FA-${year}-${String(nextNum).padStart(4, "0")}`;
+            await query(
+              "INSERT INTO invoices (user_id, invoice_number, stripe_invoice_id, description, amount_cents, period_start, period_end) VALUES (?, ?, ?, ?, ?, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH))",
+              [userId, invoiceNumber, session.id, "Abonnement Pro - Fiche HACCP", session.amount_total ?? 2000]
+            );
+          } catch (invErr) {
+            console.error("Invoice creation error:", invErr);
+          }
+
           // Send confirmation email
           try {
             const users = await query<Array<{ name: string; email: string }>>(
@@ -72,6 +92,34 @@ export async function POST(request: NextRequest) {
             "UPDATE users SET subscription_status = 'active' WHERE subscription_id = ?",
             [subscriptionId]
           );
+
+          // Create invoice record for recurring payments
+          try {
+            const users = await query<Array<{ id: number }>>(
+              "SELECT id FROM users WHERE subscription_id = ?",
+              [subscriptionId]
+            );
+            if (users[0]) {
+              const year = new Date().getFullYear();
+              const lastInv = await query<Array<{ invoice_number: string }>>(
+                "SELECT invoice_number FROM invoices ORDER BY id DESC LIMIT 1"
+              );
+              let nextNum = 1;
+              if (lastInv.length > 0) {
+                const match = lastInv[0].invoice_number.match(/(\d+)$/);
+                if (match) nextNum = parseInt(match[1]) + 1;
+              }
+              const invoiceNumber = `FA-${year}-${String(nextNum).padStart(4, "0")}`;
+              const periodStart = invoice.period_start ? new Date(invoice.period_start * 1000).toISOString().split("T")[0] : null;
+              const periodEnd = invoice.period_end ? new Date(invoice.period_end * 1000).toISOString().split("T")[0] : null;
+              await query(
+                "INSERT INTO invoices (user_id, invoice_number, stripe_invoice_id, description, amount_cents, period_start, period_end) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                [users[0].id, invoiceNumber, invoice.id, "Abonnement Pro - Fiche HACCP", invoice.amount_paid ?? 2000, periodStart, periodEnd]
+              );
+            }
+          } catch (invErr) {
+            console.error("Invoice creation error:", invErr);
+          }
         }
         break;
       }

@@ -114,6 +114,28 @@ export async function initDatabase(): Promise<void> {
     // Index already exists
   }
 
+  // Billing info columns
+  try { await p.execute("ALTER TABLE users ADD COLUMN billing_name VARCHAR(255) DEFAULT NULL"); } catch { /* exists */ }
+  try { await p.execute("ALTER TABLE users ADD COLUMN billing_address TEXT DEFAULT NULL"); } catch { /* exists */ }
+  try { await p.execute("ALTER TABLE users ADD COLUMN billing_siret VARCHAR(50) DEFAULT NULL"); } catch { /* exists */ }
+  try { await p.execute("ALTER TABLE users ADD COLUMN billing_tva_number VARCHAR(50) DEFAULT NULL"); } catch { /* exists */ }
+
+  await p.execute(`
+    CREATE TABLE IF NOT EXISTS invoices (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      invoice_number VARCHAR(50) NOT NULL UNIQUE,
+      stripe_invoice_id VARCHAR(255) DEFAULT NULL,
+      description VARCHAR(500) NOT NULL,
+      amount_cents INT NOT NULL,
+      period_start DATE DEFAULT NULL,
+      period_end DATE DEFAULT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      INDEX idx_user (user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  `);
+
   await p.execute(`
     CREATE TABLE IF NOT EXISTS pdf_preferences (
       id INT AUTO_INCREMENT PRIMARY KEY,

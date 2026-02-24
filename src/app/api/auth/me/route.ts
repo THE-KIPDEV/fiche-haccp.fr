@@ -21,7 +21,7 @@ export async function GET() {
     await initDatabase();
 
     const users = await query<UserRow[]>(
-      "SELECT id, email, name, restaurant_name, subscription_status FROM users WHERE id = ?",
+      "SELECT id, email, name, restaurant_name, subscription_status, billing_name, billing_address, billing_siret, billing_tva_number FROM users WHERE id = ?",
       [auth.userId]
     );
 
