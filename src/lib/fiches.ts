@@ -21,122 +21,25 @@ export interface FicheHACCP {
 }
 
 export const CATEGORIES = [
-  { id: "temperatures", label: "Contrôle des températures", icon: "🌡️" },
-  { id: "hygiene", label: "Hygiène et nettoyage", icon: "🧹" },
-  { id: "tracabilite", label: "Traçabilité", icon: "📋" },
-  { id: "securite", label: "Sécurité alimentaire", icon: "🛡️" },
-  { id: "equipements", label: "Équipements", icon: "⚙️" },
-  { id: "personnel", label: "Personnel", icon: "👥" },
+  { id: "hygiene", label: "Hygiène et nettoyage", icon: "spray-can" },
+  { id: "tracabilite", label: "Traçabilité", icon: "clipboard-list" },
+  { id: "securite", label: "Sécurité alimentaire", icon: "alert-triangle" },
+  { id: "temperatures", label: "Contrôle des températures", icon: "thermometer" },
+  { id: "equipements", label: "Équipements", icon: "wrench" },
 ] as const;
 
 export const FICHES: FicheHACCP[] = [
   {
     id: 1,
-    slug: "controle-temperatures-reception",
-    title: "Fiche de contrôle des températures à réception des marchandises",
-    shortTitle: "Températures réception",
-    description:
-      "Fiche obligatoire de relevé des températures à la réception des denrées alimentaires. Vérification de la conformité des températures à la livraison selon le règlement CE 852/2004.",
-    metaTitle: "Fiche contrôle températures réception HACCP – PDF gratuit",
-    metaDescription:
-      "Téléchargez gratuitement la fiche HACCP de contrôle des températures à réception. Document conforme au règlement CE 852/2004, prêt à imprimer.",
-    icon: "🌡️",
-    category: "temperatures",
-    legalBasis:
-      "Règlement (CE) n° 852/2004 relatif à l'hygiène des denrées alimentaires – Annexe II, Chapitre IX. Arrêté du 21 décembre 2009 relatif aux règles sanitaires applicables aux activités de commerce de détail.",
-    frequency: "À chaque réception de marchandises",
-    content: [
-      {
-        title: "Pourquoi ce contrôle est obligatoire ?",
-        text: "Le contrôle des températures à réception est une obligation légale pour tout établissement de restauration. Il permet de vérifier que la chaîne du froid n'a pas été rompue pendant le transport. Toute denrée reçue à une température non conforme doit être refusée et le fournisseur informé. Ce contrôle constitue un Point de Contrôle Critique (CCP) dans votre plan HACCP.",
-      },
-      {
-        title: "Températures réglementaires à respecter",
-        text: "Produits réfrigérés : entre 0°C et +4°C. Produits surgelés : ≤ -18°C. Viandes hachées : entre 0°C et +2°C. Produits de la pêche frais : entre 0°C et +2°C (sous glace fondante). Œufs et ovoproduits : entre +4°C et +6°C. Produits laitiers frais : entre +2°C et +6°C. Fruits et légumes frais : entre +6°C et +10°C.",
-      },
-      {
-        title: "Comment utiliser cette fiche ?",
-        text: "À chaque livraison, relevez la température de chaque lot avec un thermomètre sonde étalonné. Inscrivez la date, le fournisseur, le produit, la température relevée et indiquez si le lot est conforme. En cas de non-conformité, notez l'action corrective (refus, déclassement, etc.). Conservez ces fiches pendant 5 ans minimum.",
-      },
-    ],
-    pdfSections: [
-      {
-        title: "Contrôle des températures à réception",
-        fields: [
-          "Date de réception",
-          "Heure",
-          "Fournisseur",
-          "Produit / Denrée",
-          "N° de lot",
-          "DLC / DDM",
-          "Température relevée (°C)",
-          "Température attendue (°C)",
-          "Conforme (Oui / Non)",
-          "Action corrective si non-conforme",
-          "Nom du contrôleur",
-          "Signature",
-        ],
-      },
-    ],
-  },
-  {
-    id: 2,
-    slug: "releve-temperatures-stockage",
-    title: "Fiche de relevé des températures de stockage (chambres froides, réfrigérateurs)",
-    shortTitle: "Températures stockage",
-    description:
-      "Fiche de suivi quotidien des températures des enceintes réfrigérées. Contrôle obligatoire des chambres froides positives et négatives.",
-    metaTitle: "Fiche relevé températures stockage HACCP – PDF gratuit",
-    metaDescription:
-      "Téléchargez la fiche HACCP de relevé des températures de stockage. Suivi quotidien obligatoire des chambres froides, conforme à la réglementation française.",
-    icon: "❄️",
-    category: "temperatures",
-    legalBasis:
-      "Règlement (CE) n° 852/2004 – Annexe II, Chapitre IX. Arrêté du 21 décembre 2009, article 10. Note de service DGAL/SDSSA/2016-648.",
-    frequency: "2 fois par jour (matin et soir)",
-    content: [
-      {
-        title: "Obligation de suivi des températures",
-        text: "Tout exploitant du secteur alimentaire doit s'assurer que les températures de stockage des denrées sont maintenues conformément à la réglementation. Un relevé doit être effectué au minimum deux fois par jour (matin et soir) pour chaque enceinte réfrigérée. Les écarts doivent être signalés et des actions correctives mises en place immédiatement.",
-      },
-      {
-        title: "Températures cibles par type d'enceinte",
-        text: "Chambre froide positive : entre 0°C et +3°C. Réfrigérateur : entre 0°C et +4°C. Chambre froide négative (congélateur) : ≤ -18°C. Vitrine réfrigérée : entre +2°C et +6°C selon les produits. En cas de panne, les produits doivent être transférés ou consommés rapidement.",
-      },
-      {
-        title: "Conseils d'utilisation",
-        text: "Placez un thermomètre calibré dans chaque enceinte. Notez les relevés matin et soir. En cas de dépassement, vérifiez la fermeture des portes, l'état des joints, et le bon fonctionnement du groupe froid. Faites intervenir un technicien si nécessaire. Archivez les fiches pendant 5 ans.",
-      },
-    ],
-    pdfSections: [
-      {
-        title: "Relevé des températures de stockage",
-        fields: [
-          "Date",
-          "Enceinte / Équipement",
-          "Température matin (°C)",
-          "Heure relevé matin",
-          "Température soir (°C)",
-          "Heure relevé soir",
-          "Conforme (Oui / Non)",
-          "Action corrective si non-conforme",
-          "Nom du responsable",
-          "Signature",
-        ],
-      },
-    ],
-  },
-  {
-    id: 3,
     slug: "plan-nettoyage-desinfection",
     title: "Plan de nettoyage et de désinfection",
-    shortTitle: "Nettoyage & désinfection",
+    shortTitle: "Nettoyage et désinfection",
     description:
       "Plan de nettoyage et désinfection complet pour restaurant. Fréquences, produits utilisés, procédures et responsables pour chaque zone de l'établissement.",
     metaTitle: "Plan de nettoyage et désinfection restaurant HACCP – PDF gratuit",
     metaDescription:
       "Téléchargez le plan de nettoyage et désinfection HACCP pour votre restaurant. Document complet conforme au règlement CE 852/2004.",
-    icon: "🧹",
+    icon: "spray-can",
     category: "hygiene",
     legalBasis:
       "Règlement (CE) n° 852/2004 – Annexe II, Chapitre I et V. Arrêté du 21 décembre 2009, articles 12 à 14.",
@@ -160,14 +63,14 @@ export const FICHES: FicheHACCP[] = [
         title: "Plan de nettoyage et désinfection",
         fields: [
           "Zone / Équipement",
-          "Opération (nettoyage / désinfection)",
+          "Opération",
           "Produit utilisé",
           "Dosage",
           "Méthode",
           "Fréquence",
           "Temps de contact",
           "Responsable",
-          "Vérification effectuée",
+          "Vérification",
           "Date",
           "Signature",
         ],
@@ -175,7 +78,7 @@ export const FICHES: FicheHACCP[] = [
     ],
   },
   {
-    id: 4,
+    id: 2,
     slug: "tracabilite-produits",
     title: "Fiche de traçabilité des produits alimentaires",
     shortTitle: "Traçabilité produits",
@@ -184,7 +87,7 @@ export const FICHES: FicheHACCP[] = [
     metaTitle: "Fiche traçabilité produits HACCP restaurant – PDF gratuit",
     metaDescription:
       "Téléchargez la fiche de traçabilité des produits alimentaires HACCP. Obligation légale pour tout restaurant, conforme au règlement CE 178/2002.",
-    icon: "📋",
+    icon: "clipboard-list",
     category: "tracabilite",
     legalBasis:
       "Règlement (CE) n° 178/2002, articles 18 et 19, relatif à la traçabilité des denrées alimentaires. Règlement d'exécution (UE) n° 931/2011 pour les denrées d'origine animale.",
@@ -214,59 +117,16 @@ export const FICHES: FicheHACCP[] = [
           "DLC / DDM",
           "Quantité reçue",
           "Origine / Pays",
-          "Température à réception (°C)",
-          "Conforme (Oui / Non)",
-          "Date d'utilisation / ouverture",
+          "Température (°C)",
+          "Conforme (O/N)",
+          "Date utilisation",
           "Contrôleur",
         ],
       },
     ],
   },
   {
-    id: 5,
-    slug: "protocole-lavage-mains",
-    title: "Protocole de lavage des mains",
-    shortTitle: "Lavage des mains",
-    description:
-      "Protocole détaillé de lavage des mains conforme aux exigences sanitaires. Affichage obligatoire dans toutes les zones de préparation alimentaire.",
-    metaTitle: "Protocole lavage des mains HACCP restaurant – PDF gratuit",
-    metaDescription:
-      "Téléchargez le protocole de lavage des mains HACCP. Affichage obligatoire en restauration, conforme au règlement CE 852/2004.",
-    icon: "🧴",
-    category: "hygiene",
-    legalBasis:
-      "Règlement (CE) n° 852/2004 – Annexe II, Chapitre I, point 4 et Chapitre VIII. Arrêté du 21 décembre 2009, article 16.",
-    frequency: "Affichage permanent – Application continue",
-    content: [
-      {
-        title: "Quand se laver les mains ?",
-        text: "Le lavage des mains est obligatoire : à la prise de poste, après passage aux toilettes, après avoir touché des denrées crues (viande, poisson, œufs), après avoir manipulé des déchets ou des emballages, après s'être mouché, après une pause, entre deux tâches différentes, après avoir touché de l'argent.",
-      },
-      {
-        title: "Les 6 étapes du lavage des mains",
-        text: "1. Mouiller les mains sous l'eau tiède. 2. Appliquer du savon bactéricide. 3. Frotter les paumes, le dos des mains, entre les doigts, les pouces et les ongles pendant 30 secondes minimum. 4. Rincer abondamment à l'eau claire. 5. Sécher avec un essuie-mains à usage unique. 6. Fermer le robinet avec l'essuie-mains (si robinet non automatique).",
-      },
-      {
-        title: "Équipements obligatoires",
-        text: "Chaque poste de lavage des mains doit disposer : d'eau courante chaude et froide, de savon bactéricide, d'essuie-mains à usage unique, d'une poubelle à commande non manuelle. L'utilisation de gants ne dispense pas du lavage des mains. Les ongles doivent être courts, propres et sans vernis.",
-      },
-    ],
-    pdfSections: [
-      {
-        title: "Protocole de lavage des mains",
-        fields: [
-          "Étape 1 : Mouiller les mains",
-          "Étape 2 : Appliquer le savon bactéricide",
-          "Étape 3 : Frotter 30 secondes (paumes, dos, doigts, ongles)",
-          "Étape 4 : Rincer à l'eau claire",
-          "Étape 5 : Sécher avec essuie-mains à usage unique",
-          "Étape 6 : Fermer le robinet avec l'essuie-mains",
-        ],
-      },
-    ],
-  },
-  {
-    id: 6,
+    id: 3,
     slug: "fiche-non-conformite",
     title: "Fiche de non-conformité et actions correctives",
     shortTitle: "Non-conformité",
@@ -275,7 +135,7 @@ export const FICHES: FicheHACCP[] = [
     metaTitle: "Fiche non-conformité HACCP restaurant – PDF gratuit",
     metaDescription:
       "Téléchargez la fiche de non-conformité HACCP avec actions correctives. Document obligatoire pour le Plan de Maîtrise Sanitaire de votre restaurant.",
-    icon: "⚠️",
+    icon: "alert-triangle",
     category: "securite",
     legalBasis:
       "Règlement (CE) n° 852/2004, article 5. Codex Alimentarius – Principes généraux d'hygiène alimentaire, 7ème principe HACCP (documentation).",
@@ -298,67 +158,25 @@ export const FICHES: FicheHACCP[] = [
       {
         title: "Fiche de non-conformité",
         fields: [
-          "Date de détection",
+          "Date",
           "Détecté par",
-          "Zone / Équipement concerné",
-          "Description de la non-conformité",
-          "Gravité (mineure / majeure / critique)",
-          "Mesure immédiate prise",
-          "Analyse des causes",
+          "Zone concernée",
+          "Description",
+          "Gravité",
+          "Mesure immédiate",
+          "Analyse causes",
           "Action corrective",
-          "Responsable de l'action corrective",
-          "Date de mise en œuvre",
-          "Vérification de l'efficacité",
-          "Date de clôture",
-          "Signature du responsable",
+          "Responsable",
+          "Date mise en œuvre",
+          "Vérification",
+          "Date clôture",
+          "Signature",
         ],
       },
     ],
   },
   {
-    id: 7,
-    slug: "gestion-allergenes",
-    title: "Fiche de gestion des allergènes",
-    shortTitle: "Gestion allergènes",
-    description:
-      "Fiche de gestion des 14 allergènes majeurs à déclaration obligatoire. Traçabilité des allergènes dans les plats et information du consommateur.",
-    metaTitle: "Fiche gestion allergènes HACCP restaurant – PDF gratuit",
-    metaDescription:
-      "Téléchargez la fiche de gestion des 14 allergènes obligatoires HACCP. Conforme au règlement UE 1169/2011, dit règlement INCO.",
-    icon: "🥜",
-    category: "securite",
-    legalBasis:
-      "Règlement (UE) n° 1169/2011 (INCO) – Article 9 et Annexe II. Décret n° 2015-447 du 17 avril 2015. Les 14 allergènes à déclaration obligatoire.",
-    frequency: "Mise à jour à chaque changement de recette ou de fournisseur",
-    content: [
-      {
-        title: "Les 14 allergènes à déclaration obligatoire",
-        text: "1. Gluten (blé, seigle, orge, avoine, épeautre). 2. Crustacés. 3. Œufs. 4. Poissons. 5. Arachides. 6. Soja. 7. Lait (lactose). 8. Fruits à coque (noix, amandes, noisettes, etc.). 9. Céleri. 10. Moutarde. 11. Graines de sésame. 12. Anhydride sulfureux et sulfites (>10mg/kg). 13. Lupin. 14. Mollusques.",
-      },
-      {
-        title: "Obligation d'information",
-        text: "Depuis le 1er juillet 2015, tout restaurateur doit informer ses clients de la présence des 14 allergènes dans ses plats. Cette information peut être faite : par écrit sur la carte/menu, via un tableau récapitulatif affiché, ou oralement (avec mention visible « allergènes : renseignez-vous auprès du personnel »). Un document écrit de référence doit être disponible.",
-      },
-      {
-        title: "Comment utiliser cette fiche",
-        text: "Pour chaque plat de votre carte, listez les allergènes présents (issus des ingrédients et de la recette). Vérifiez les étiquettes de chaque produit utilisé. Mettez à jour en cas de changement de fournisseur ou de recette. Formez votre personnel à l'information allergènes et aux risques de contamination croisée.",
-      },
-    ],
-    pdfSections: [
-      {
-        title: "Tableau de gestion des allergènes",
-        fields: [
-          "Nom du plat",
-          "Gluten", "Crustacés", "Œufs", "Poissons", "Arachides",
-          "Soja", "Lait", "Fruits à coque", "Céleri", "Moutarde",
-          "Sésame", "Sulfites", "Lupin", "Mollusques",
-          "Observations / Remarques",
-        ],
-      },
-    ],
-  },
-  {
-    id: 8,
+    id: 4,
     slug: "suivi-huiles-friture",
     title: "Fiche de suivi des huiles de friture",
     shortTitle: "Huiles de friture",
@@ -367,7 +185,7 @@ export const FICHES: FicheHACCP[] = [
     metaTitle: "Fiche suivi huiles de friture HACCP – PDF gratuit",
     metaDescription:
       "Téléchargez la fiche HACCP de suivi des huiles de friture. Contrôle de qualité obligatoire, conforme au décret 2008-184.",
-    icon: "🍟",
+    icon: "flame",
     category: "equipements",
     legalBasis:
       "Décret n° 2008-184 du 26 février 2008 relatif aux huiles de friture. Le taux de composés polaires ne doit pas dépasser 25%. Recommandation ANSES sur le renouvellement des bains de friture.",
@@ -379,7 +197,7 @@ export const FICHES: FicheHACCP[] = [
       },
       {
         title: "Bonnes pratiques",
-        text: "Ne jamais mélanger huile neuve et huile usagée. Ne pas dépasser 180°C. Filtrer l'huile après chaque service. Couvrir la friteuse quand elle n'est pas utilisée. Changer l'huile au maximum tous les 8 à 10 bains. Ne pas ajouter de sel dans le bain de friture. Utiliser une huile adaptée à la friture (tournesol oléique, arachide).",
+        text: "La durée de vie de l'huile dépend du type d'aliment frit, de la température et du filtrage. Ne pas se fier à un nombre fixe de bains. Contrôler régulièrement avec un testeur de composés polaires : l'huile doit être changée dès que le taux approche 25% (seuil réglementaire du décret 2008-184). Filtrer l'huile après chaque service pour prolonger sa durée de vie. Ne jamais mélanger huile neuve et huile usagée. Ne pas dépasser 180°C. Couvrir la friteuse quand elle n'est pas utilisée. Ne pas ajouter de sel dans le bain de friture. Utiliser une huile adaptée à la friture (tournesol oléique, arachide).",
       },
     ],
     pdfSections: [
@@ -387,13 +205,13 @@ export const FICHES: FicheHACCP[] = [
         title: "Suivi des huiles de friture",
         fields: [
           "Date",
-          "Friteuse concernée",
+          "Friteuse",
           "Type d'huile",
-          "Contrôle visuel (couleur, mousse, odeur)",
-          "Test composés polaires (%)",
-          "Conforme (Oui / Non)",
-          "Action (filtrage / changement)",
-          "Huile neuve ajoutée (Oui / Non)",
+          "Contrôle visuel",
+          "Composés polaires (%)",
+          "Conforme (O/N)",
+          "Action",
+          "Huile neuve (O/N)",
           "Responsable",
           "Signature",
         ],
@@ -401,7 +219,7 @@ export const FICHES: FicheHACCP[] = [
     ],
   },
   {
-    id: 9,
+    id: 5,
     slug: "refroidissement-rapide",
     title: "Fiche de suivi du refroidissement rapide",
     shortTitle: "Refroidissement rapide",
@@ -410,7 +228,7 @@ export const FICHES: FicheHACCP[] = [
     metaTitle: "Fiche refroidissement rapide HACCP restaurant – PDF gratuit",
     metaDescription:
       "Téléchargez la fiche HACCP de refroidissement rapide. Contrôle obligatoire du passage de +63°C à +10°C en moins de 2h.",
-    icon: "🧊",
+    icon: "snowflake",
     category: "temperatures",
     legalBasis:
       "Arrêté du 21 décembre 2009, article 8. Règlement (CE) n° 852/2004 – Annexe II, Chapitre IX. Le refroidissement doit être effectué de +63°C à +10°C en moins de 2 heures.",
@@ -430,14 +248,14 @@ export const FICHES: FicheHACCP[] = [
         title: "Suivi du refroidissement rapide",
         fields: [
           "Date",
-          "Préparation / Plat",
-          "Heure début refroidissement",
-          "Température début (°C)",
-          "Heure fin refroidissement",
-          "Température fin (°C)",
-          "Durée totale",
-          "Conforme < 2h (Oui / Non)",
-          "Méthode utilisée",
+          "Préparation",
+          "Heure début",
+          "Temp. début (°C)",
+          "Heure fin",
+          "Temp. fin (°C)",
+          "Durée",
+          "Conforme <2h (O/N)",
+          "Méthode",
           "Responsable",
           "Signature",
         ],
@@ -445,7 +263,7 @@ export const FICHES: FicheHACCP[] = [
     ],
   },
   {
-    id: 10,
+    id: 6,
     slug: "remise-en-temperature",
     title: "Fiche de suivi de la remise en température",
     shortTitle: "Remise en température",
@@ -454,7 +272,7 @@ export const FICHES: FicheHACCP[] = [
     metaTitle: "Fiche remise en température HACCP restaurant – PDF gratuit",
     metaDescription:
       "Téléchargez la fiche HACCP de remise en température. Obligation d'atteindre +63°C à cœur en moins d'1h, conforme à l'arrêté du 21/12/2009.",
-    icon: "🔥",
+    icon: "thermometer",
     category: "temperatures",
     legalBasis:
       "Arrêté du 21 décembre 2009, article 9. La remise en température doit permettre d'atteindre +63°C à cœur en moins d'une heure. Le produit doit être servi immédiatement ou maintenu à +63°C minimum.",
@@ -474,14 +292,14 @@ export const FICHES: FicheHACCP[] = [
         title: "Suivi de la remise en température",
         fields: [
           "Date",
-          "Préparation / Plat",
+          "Préparation",
           "Heure début",
-          "Température début (°C)",
+          "Temp. début (°C)",
           "Heure fin",
-          "Température à cœur atteinte (°C)",
-          "Durée totale",
-          "Conforme ≥63°C en <1h (Oui / Non)",
-          "Service immédiat ou maintien chaud",
+          "Temp. à cœur (°C)",
+          "Durée",
+          "Conforme (O/N)",
+          "Service / Maintien",
           "Responsable",
           "Signature",
         ],
@@ -489,7 +307,7 @@ export const FICHES: FicheHACCP[] = [
     ],
   },
   {
-    id: 11,
+    id: 7,
     slug: "reception-marchandises",
     title: "Fiche de contrôle à la réception des marchandises",
     shortTitle: "Réception marchandises",
@@ -498,7 +316,7 @@ export const FICHES: FicheHACCP[] = [
     metaTitle: "Fiche contrôle réception marchandises HACCP – PDF gratuit",
     metaDescription:
       "Téléchargez la fiche HACCP de contrôle à la réception des marchandises. Vérification complète des livraisons pour votre restaurant.",
-    icon: "📦",
+    icon: "package",
     category: "tracabilite",
     legalBasis:
       "Règlement (CE) n° 852/2004 – Annexe II. Règlement (CE) n° 178/2002 relatif à la traçabilité. Arrêté du 21 décembre 2009.",
@@ -517,18 +335,18 @@ export const FICHES: FicheHACCP[] = [
       {
         title: "Contrôle à la réception des marchandises",
         fields: [
-          "Date et heure de livraison",
+          "Date / Heure",
           "Fournisseur",
-          "N° du bon de livraison",
+          "N° BL",
           "Produit",
-          "Quantité commandée / reçue",
+          "Qté cmd / reçue",
           "DLC / DDM",
-          "N° de lot",
-          "État emballage (conforme / non-conforme)",
-          "Aspect visuel et olfactif",
-          "Température relevée (°C)",
-          "Accepté / Refusé",
-          "Motif de refus",
+          "N° lot",
+          "Emballage (O/N)",
+          "Aspect / Odeur",
+          "Temp. (°C)",
+          "Accepté (O/N)",
+          "Motif refus",
           "Contrôleur",
           "Signature",
         ],
@@ -536,7 +354,7 @@ export const FICHES: FicheHACCP[] = [
     ],
   },
   {
-    id: 12,
+    id: 8,
     slug: "entretien-equipements",
     title: "Fiche d'entretien et maintenance des équipements",
     shortTitle: "Entretien équipements",
@@ -545,7 +363,7 @@ export const FICHES: FicheHACCP[] = [
     metaTitle: "Fiche entretien équipements cuisine HACCP – PDF gratuit",
     metaDescription:
       "Téléchargez la fiche HACCP d'entretien des équipements de cuisine. Suivi de maintenance préventive pour votre restaurant.",
-    icon: "⚙️",
+    icon: "wrench",
     category: "equipements",
     legalBasis:
       "Règlement (CE) n° 852/2004 – Annexe II, Chapitre V. Les équipements doivent être maintenus en bon état de fonctionnement et d'entretien. L'étalonnage des instruments de mesure (thermomètres) est obligatoire.",
@@ -566,12 +384,12 @@ export const FICHES: FicheHACCP[] = [
         fields: [
           "Date",
           "Équipement",
-          "Type d'intervention (préventive / corrective)",
-          "Description de l'intervention",
-          "Intervenant (interne / prestataire)",
+          "Type (préventive / corrective)",
+          "Description",
+          "Intervenant",
           "Pièces remplacées",
-          "Résultat / État après intervention",
-          "Prochaine intervention prévue",
+          "Résultat / État",
+          "Prochaine intervention",
           "Responsable",
           "Signature",
         ],

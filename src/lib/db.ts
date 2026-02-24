@@ -101,4 +101,24 @@ export async function initDatabase(): Promise<void> {
       INDEX idx_user (user_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
+
+  await p.execute(`
+    CREATE TABLE IF NOT EXISTS pdf_preferences (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      fiche_slug VARCHAR(100) NOT NULL,
+      restaurant_name VARCHAR(255) DEFAULT '',
+      logo_base64 MEDIUMTEXT DEFAULT NULL,
+      logo_mime_type VARCHAR(50) DEFAULT NULL,
+      header_color VARCHAR(7) DEFAULT '#065f46',
+      orientation ENUM('portrait','landscape') DEFAULT 'portrait',
+      row_count INT DEFAULT 30,
+      selected_fields JSON DEFAULT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      UNIQUE KEY uk_user_fiche (user_id, fiche_slug),
+      INDEX idx_user (user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+  `);
 }

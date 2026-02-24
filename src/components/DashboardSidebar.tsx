@@ -2,14 +2,30 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  LayoutDashboard,
+  FileText,
+  Users,
+  CheckSquare,
+  ClipboardList,
+  CreditCard,
+  LogOut,
+  type LucideIcon,
+} from "lucide-react";
 
-const NAV_ITEMS = [
-  { href: "/tableau-de-bord", label: "Tableau de bord", icon: "📊" },
-  { href: "/tableau-de-bord/fiches", label: "Fiches HACCP (PDF)", icon: "📄" },
-  { href: "/tableau-de-bord/employes", label: "Employés", icon: "👥" },
-  { href: "/tableau-de-bord/taches", label: "Tâches HACCP", icon: "✅" },
-  { href: "/tableau-de-bord/tracabilite", label: "Traçabilité", icon: "📋" },
-  { href: "/tableau-de-bord/abonnement", label: "Abonnement", icon: "💳" },
+interface NavItem {
+  href: string;
+  label: string;
+  icon: LucideIcon;
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { href: "/tableau-de-bord", label: "Tableau de bord", icon: LayoutDashboard },
+  { href: "/tableau-de-bord/fiches", label: "Fiches HACCP", icon: FileText },
+  { href: "/tableau-de-bord/employes", label: "Employés", icon: Users },
+  { href: "/tableau-de-bord/taches", label: "Tâches HACCP", icon: CheckSquare },
+  { href: "/tableau-de-bord/tracabilite", label: "Traçabilité", icon: ClipboardList },
+  { href: "/tableau-de-bord/abonnement", label: "Abonnement", icon: CreditCard },
 ];
 
 export function DashboardSidebar() {
@@ -30,6 +46,7 @@ export function DashboardSidebar() {
           <ul className="flex md:flex-col gap-1 overflow-x-auto md:overflow-visible">
             {NAV_ITEMS.map((item) => {
               const isActive = pathname === item.href;
+              const Icon = item.icon;
               return (
                 <li key={item.href}>
                   <Link
@@ -40,7 +57,7 @@ export function DashboardSidebar() {
                         : "text-gray-600 hover:bg-gray-100"
                     }`}
                   >
-                    <span aria-hidden="true">{item.icon}</span>
+                    <Icon className="w-4 h-4" />
                     {item.label}
                   </Link>
                 </li>
@@ -51,7 +68,7 @@ export function DashboardSidebar() {
                 onClick={handleLogout}
                 className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-gray-500 hover:bg-gray-100 w-full transition-colors"
               >
-                <span aria-hidden="true">🚪</span>
+                <LogOut className="w-4 h-4" />
                 Déconnexion
               </button>
             </li>

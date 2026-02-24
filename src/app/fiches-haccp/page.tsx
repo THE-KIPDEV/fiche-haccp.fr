@@ -3,11 +3,12 @@ import { FICHES, CATEGORIES } from "@/lib/fiches";
 import { FicheCard } from "@/components/FicheCard";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { CTABanner } from "@/components/CTABanner";
+import { FicheIcon } from "@/components/FicheIcon";
 
 export const metadata: Metadata = {
   title: "Toutes les fiches HACCP restaurant – PDF gratuits à télécharger",
   description:
-    "Retrouvez toutes les fiches HACCP obligatoires pour votre restaurant : contrôle des températures, traçabilité, nettoyage, allergènes, non-conformité. Téléchargement PDF gratuit.",
+    "Retrouvez toutes les fiches HACCP obligatoires pour votre restaurant : traçabilité, nettoyage, non-conformité, refroidissement rapide. Téléchargement PDF gratuit.",
   alternates: { canonical: "/fiches-haccp" },
 };
 
@@ -20,8 +21,8 @@ export default function FichesPage() {
         Fiches HACCP obligatoires pour restaurant
       </h1>
       <p className="text-gray-600 text-lg mb-10 max-w-3xl">
-        Téléchargez gratuitement toutes les fiches de contrôle HACCP nécessaires à votre Plan de Maîtrise
-        Sanitaire (PMS). Documents conformes au règlement CE 852/2004 et à l&apos;arrêté du 21 décembre 2009.
+        Téléchargez gratuitement les fiches de contrôle HACCP nécessaires à votre Plan de Maîtrise
+        Sanitaire (PMS). Documents conformes au règlement CE 852/2004.
       </p>
 
       {CATEGORIES.map((cat) => {
@@ -30,7 +31,8 @@ export default function FichesPage() {
         return (
           <section key={cat.id} id={cat.id} className="mb-12">
             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span aria-hidden="true">{cat.icon}</span> {cat.label}
+              <FicheIcon name={cat.icon} className="w-5 h-5 text-primary" />
+              {cat.label}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {catFiches.map((fiche) => (

@@ -1,239 +1,366 @@
-import { PDFDocument, rgb, StandardFonts, PDFPage, PDFFont } from "pdf-lib";
+import { PDFDocument, rgb, StandardFonts, PDFPage, PDFFont, PDFImage } from "pdf-lib";
 import { FicheHACCP, FICHES } from "./fiches";
 
-const PRIMARY = rgb(6 / 255, 95 / 255, 70 / 255);
-const PRIMARY_LIGHT = rgb(5 / 255, 150 / 255, 105 / 255);
+// Default colors
+const DEFAULT_PRIMARY = { r: 6 / 255, g: 95 / 255, b: 70 / 255 };
 const TEXT_COLOR = rgb(31 / 255, 41 / 255, 55 / 255);
 const GRAY = rgb(107 / 255, 114 / 255, 128 / 255);
-const LIGHT_BG = rgb(249 / 255, 250 / 255, 251 / 255);
+const LIGHT_BG = rgb(245 / 255, 245 / 255, 245 / 255);
 const WHITE = rgb(1, 1, 1);
-const LINE_COLOR = rgb(229 / 255, 231 / 255, 235 / 255);
+const LINE_COLOR = rgb(220 / 255, 220 / 255, 220 / 255);
 
-const PAGE_W = 595.28;
-const PAGE_H = 841.89;
-const MARGIN = 50;
-const CONTENT_W = PAGE_W - MARGIN * 2;
+const MARGIN = 40;
+const HEADER_HEIGHT = 55;
+const FOOTER_HEIGHT = 28;
+const ROW_HEIGHT = 20;
+const HEADER_ROW_HEIGHT = 22;
 
-function drawHeader(page: PDFPage, font: PDFFont, boldFont: PDFFont, fiche: FicheHACCP) {
-  // Green header bar
-  page.drawRectangle({
-    x: 0, y: PAGE_H - 80,
-    width: PAGE_W, height: 80,
-    color: PRIMARY,
-  });
-
-  page.drawText("fiche-haccp.fr", {
-    x: MARGIN, y: PAGE_H - 35,
-    size: 10, font, color: WHITE,
-  });
-
-  page.drawText(fiche.title, {
-    x: MARGIN, y: PAGE_H - 60,
-    size: 13, font: boldFont, color: WHITE,
-    maxWidth: CONTENT_W,
-  });
-
-  // Legal basis below header
-  page.drawRectangle({
-    x: MARGIN, y: PAGE_H - 120,
-    width: CONTENT_W, height: 30,
-    color: LIGHT_BG,
-  });
-
-  page.drawText(`Base légale : ${fiche.legalBasis.substring(0, 100)}...`, {
-    x: MARGIN + 8, y: PAGE_H - 112,
-    size: 7, font, color: GRAY,
-    maxWidth: CONTENT_W - 16,
-  });
+export interface PdfBuilderOptions {
+  fiche: FicheHACCP;
+  orientation?: "portrait" | "landscape";
+  rowCount?: number;
+  selectedFields?: string[];
+  headerColor?: { r: number; g: number; b: number };
+  restaurantName?: string;
+  logoBytes?: Uint8Array;
+  logoMimeType?: string;
 }
 
-function drawTableHeader(page: PDFPage, boldFont: PDFFont, y: number, fields: string[], colWidths: number[]) {
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16) / 255,
+        g: parseInt(result[2], 16) / 255,
+        b: parseInt(result[3], 16) / 255,
+      }
+    : DEFAULT_PRIMARY;
+}
+
+function lightenColor(c: { r: number; g: number; b: number }, amount: number) {
+  return {
+    r: Math.min(1, c.r + amount),
+    g: Math.min(1, c.g + amount),
+    b: Math.min(1, c.b + amount),
+  };
+}
+
+function calculateColumnWidths(
+  fields: string[],
+  font: PDFFont,
+  totalWidth: number,
+  fontSize: number
+): number[] {
+  const minColWidth = 45;
+  const padding = 10;
+
+  const labelWidths = fields.map(
+    (f) => Math.max(font.widthOfTextAtSize(f, fontSize) + padding, minColWidth)
+  );
+
+  const totalRequested = labelWidths.reduce((a, b) => a + b, 0);
+
+  if (totalRequested <= totalWidth) {
+    const remaining = totalWidth - totalRequested;
+    return labelWidths.map(
+      (w) => w + (w / totalRequested) * remaining
+    );
+  }
+
+  const scale = totalWidth / totalRequested;
+  return labelWidths.map((w) => Math.max(w * scale, minColWidth));
+}
+
+function drawHeader(
+  page: PDFPage,
+  font: PDFFont,
+  boldFont: PDFFont,
+  fiche: FicheHACCP,
+  primaryColor: { r: number; g: number; b: number },
+  pageW: number,
+  pageH: number,
+  restaurantName?: string,
+  logoImage?: PDFImage
+) {
+  const primary = rgb(primaryColor.r, primaryColor.g, primaryColor.b);
+
   page.drawRectangle({
-    x: MARGIN, y: y - 18,
-    width: CONTENT_W, height: 20,
-    color: PRIMARY,
+    x: 0,
+    y: pageH - HEADER_HEIGHT,
+    width: pageW,
+    height: HEADER_HEIGHT,
+    color: primary,
+  });
+
+  let textX = MARGIN;
+
+  if (logoImage) {
+    const logoMaxH = HEADER_HEIGHT - 12;
+    const logoMaxW = 80;
+    const scale = Math.min(
+      logoMaxW / logoImage.width,
+      logoMaxH / logoImage.height
+    );
+    const logoW = logoImage.width * scale;
+    const logoH = logoImage.height * scale;
+
+    page.drawImage(logoImage, {
+      x: MARGIN,
+      y: pageH - HEADER_HEIGHT + (HEADER_HEIGHT - logoH) / 2,
+      width: logoW,
+      height: logoH,
+    });
+    textX = MARGIN + logoW + 10;
+  }
+
+  const titleText = restaurantName
+    ? `${restaurantName} — ${fiche.shortTitle}`
+    : fiche.shortTitle;
+
+  page.drawText(titleText, {
+    x: textX,
+    y: pageH - 25,
+    size: 12,
+    font: boldFont,
+    color: WHITE,
+    maxWidth: pageW - textX - MARGIN,
+  });
+
+  page.drawText(fiche.legalBasis.substring(0, 80) + "...", {
+    x: textX,
+    y: pageH - 42,
+    size: 7,
+    font,
+    color: rgb(
+      Math.min(1, primaryColor.r + 0.4),
+      Math.min(1, primaryColor.g + 0.4),
+      Math.min(1, primaryColor.b + 0.4)
+    ),
+    maxWidth: pageW - textX - MARGIN,
+  });
+
+  // Frequency badge below header
+  const contentW = pageW - MARGIN * 2;
+  page.drawText(`Fréquence : ${fiche.frequency}`, {
+    x: MARGIN,
+    y: pageH - HEADER_HEIGHT - 16,
+    size: 8,
+    font: boldFont,
+    color: primary,
+  });
+
+  return pageH - HEADER_HEIGHT - 28;
+}
+
+function drawTableHeader(
+  page: PDFPage,
+  boldFont: PDFFont,
+  y: number,
+  fields: string[],
+  colWidths: number[],
+  primaryColor: { r: number; g: number; b: number }
+) {
+  const primary = rgb(primaryColor.r, primaryColor.g, primaryColor.b);
+  const contentW = colWidths.reduce((a, b) => a + b, 0);
+
+  page.drawRectangle({
+    x: MARGIN,
+    y: y - HEADER_ROW_HEIGHT,
+    width: contentW,
+    height: HEADER_ROW_HEIGHT,
+    color: primary,
   });
 
   let x = MARGIN + 4;
   fields.forEach((field, i) => {
+    const maxW = colWidths[i] - 8;
+    const fontSize = field.length > 15 ? 6 : 7;
     page.drawText(field, {
-      x, y: y - 14,
-      size: 7, font: boldFont, color: WHITE,
-      maxWidth: colWidths[i] - 8,
+      x,
+      y: y - HEADER_ROW_HEIGHT + 7,
+      size: fontSize,
+      font: boldFont,
+      color: WHITE,
+      maxWidth: maxW,
     });
     x += colWidths[i];
   });
 
-  return y - 18;
+  return y - HEADER_ROW_HEIGHT;
 }
 
-function drawTableRows(page: PDFPage, font: PDFFont, y: number, rowCount: number, colWidths: number[]) {
+function drawTableRows(
+  page: PDFPage,
+  font: PDFFont,
+  y: number,
+  rowCount: number,
+  colWidths: number[],
+  primaryColor: { r: number; g: number; b: number }
+) {
   let currentY = y;
+  const contentW = colWidths.reduce((a, b) => a + b, 0);
+  const altBg = rgb(
+    Math.min(1, primaryColor.r * 0.05 + 0.95),
+    Math.min(1, primaryColor.g * 0.05 + 0.95),
+    Math.min(1, primaryColor.b * 0.05 + 0.95)
+  );
 
   for (let r = 0; r < rowCount; r++) {
-    const bg = r % 2 === 0 ? WHITE : LIGHT_BG;
+    const bg = r % 2 === 0 ? WHITE : altBg;
     page.drawRectangle({
-      x: MARGIN, y: currentY - 18,
-      width: CONTENT_W, height: 18,
+      x: MARGIN,
+      y: currentY - ROW_HEIGHT,
+      width: contentW,
+      height: ROW_HEIGHT,
       color: bg,
     });
 
-    // Draw column separators
+    // Column separators
     let x = MARGIN;
     colWidths.forEach((w) => {
       page.drawLine({
         start: { x, y: currentY },
-        end: { x, y: currentY - 18 },
-        thickness: 0.5,
+        end: { x, y: currentY - ROW_HEIGHT },
+        thickness: 0.3,
         color: LINE_COLOR,
       });
       x += w;
     });
 
-    // Bottom line
+    // Right border
     page.drawLine({
-      start: { x: MARGIN, y: currentY - 18 },
-      end: { x: MARGIN + CONTENT_W, y: currentY - 18 },
-      thickness: 0.5,
+      start: { x, y: currentY },
+      end: { x, y: currentY - ROW_HEIGHT },
+      thickness: 0.3,
       color: LINE_COLOR,
     });
 
-    // Empty cell text placeholder
-    let cellX = MARGIN + 4;
-    colWidths.forEach((w) => {
-      page.drawText("", {
-        x: cellX, y: currentY - 14,
-        size: 8, font, color: TEXT_COLOR,
-      });
-      cellX += w;
+    // Bottom border
+    page.drawLine({
+      start: { x: MARGIN, y: currentY - ROW_HEIGHT },
+      end: { x: MARGIN + contentW, y: currentY - ROW_HEIGHT },
+      thickness: 0.3,
+      color: LINE_COLOR,
     });
 
-    currentY -= 18;
+    currentY -= ROW_HEIGHT;
   }
 
   return currentY;
 }
 
-function drawFooter(page: PDFPage, font: PDFFont) {
-  // Footer bar
+function drawFooter(
+  page: PDFPage,
+  font: PDFFont,
+  pageW: number,
+  primaryColor: { r: number; g: number; b: number }
+) {
+  const lighter = lightenColor(primaryColor, 0.15);
   page.drawRectangle({
-    x: 0, y: 0,
-    width: PAGE_W, height: 35,
-    color: PRIMARY_LIGHT,
+    x: 0,
+    y: 0,
+    width: pageW,
+    height: FOOTER_HEIGHT,
+    color: rgb(lighter.r, lighter.g, lighter.b),
   });
 
-  page.drawText("Document généré sur fiche-haccp.fr — Conforme à la réglementation française en vigueur", {
-    x: MARGIN, y: 14,
-    size: 8, font, color: WHITE,
-  });
+  page.drawText(
+    "fiche-haccp.fr — Conforme à la réglementation française",
+    {
+      x: MARGIN,
+      y: 10,
+      size: 7,
+      font,
+      color: WHITE,
+    }
+  );
 
-  page.drawText(`Généré le ${new Date().toLocaleDateString("fr-FR")}`, {
-    x: PAGE_W - MARGIN - 120, y: 14,
-    size: 8, font, color: WHITE,
+  page.drawText(`${new Date().toLocaleDateString("fr-FR")}`, {
+    x: pageW - MARGIN - 60,
+    y: 10,
+    size: 7,
+    font,
+    color: WHITE,
   });
 }
 
-export async function generateFichePDF(fiche: FicheHACCP): Promise<Uint8Array> {
+export async function generateFichePDF(
+  options: PdfBuilderOptions
+): Promise<Uint8Array> {
+  const {
+    fiche,
+    orientation = "portrait",
+    rowCount = 30,
+    selectedFields,
+    headerColor = DEFAULT_PRIMARY,
+    restaurantName,
+    logoBytes,
+    logoMimeType,
+  } = options;
+
   const doc = await PDFDocument.create();
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const boldFont = await doc.embedFont(StandardFonts.HelveticaBold);
 
-  const page = doc.addPage([PAGE_W, PAGE_H]);
+  const pageW = orientation === "landscape" ? 841.89 : 595.28;
+  const pageH = orientation === "landscape" ? 595.28 : 841.89;
+  const contentW = pageW - MARGIN * 2;
 
-  drawHeader(page, font, boldFont, fiche);
-
-  let y = PAGE_H - 150;
-
-  // Frequency info
-  page.drawText(`Fréquence : ${fiche.frequency}`, {
-    x: MARGIN, y,
-    size: 9, font: boldFont, color: PRIMARY,
-  });
-  y -= 25;
-
-  // Content sections
-  for (const section of fiche.content) {
-    if (y < 150) break;
-
-    page.drawText(section.title, {
-      x: MARGIN, y,
-      size: 11, font: boldFont, color: PRIMARY,
-    });
-    y -= 16;
-
-    const words = section.text.split(" ");
-    let line = "";
-    for (const word of words) {
-      const testLine = line ? `${line} ${word}` : word;
-      const width = font.widthOfTextAtSize(testLine, 9);
-      if (width > CONTENT_W) {
-        page.drawText(line, { x: MARGIN, y, size: 9, font, color: TEXT_COLOR });
-        y -= 13;
-        line = word;
+  // Embed logo if provided
+  let logoImage: PDFImage | undefined;
+  if (logoBytes && logoMimeType) {
+    try {
+      if (logoMimeType.includes("png")) {
+        logoImage = await doc.embedPng(logoBytes);
       } else {
-        line = testLine;
+        logoImage = await doc.embedJpg(logoBytes);
       }
-    }
-    if (line) {
-      page.drawText(line, { x: MARGIN, y, size: 9, font, color: TEXT_COLOR });
-      y -= 20;
+    } catch {
+      // Skip logo on error
     }
   }
 
-  // PDF table sections
-  for (const section of fiche.pdfSections) {
-    if (y < 250) {
-      // Add new page for table
-      const newPage = doc.addPage([PAGE_W, PAGE_H]);
-      drawHeader(newPage, font, boldFont, fiche);
-      y = PAGE_H - 150;
+  // Determine fields to use
+  const allFields = fiche.pdfSections[0]?.fields || [];
+  const fields = selectedFields
+    ? allFields.filter((f) => selectedFields.includes(f))
+    : allFields;
 
-      newPage.drawText(section.title, {
-        x: MARGIN, y,
-        size: 12, font: boldFont, color: PRIMARY,
-      });
-      y -= 25;
+  if (fields.length === 0) return doc.save();
 
-      // Calculate column widths
-      const maxCols = Math.min(section.fields.length, 6);
-      const colWidth = CONTENT_W / maxCols;
-      const colWidths = Array(maxCols).fill(colWidth);
-      const displayFields = section.fields.slice(0, maxCols);
+  // Calculate how many rows fit per page
+  const availableHeight =
+    pageH - HEADER_HEIGHT - 28 - HEADER_ROW_HEIGHT - FOOTER_HEIGHT - 20;
+  const maxRowsPerPage = Math.floor(availableHeight / ROW_HEIGHT);
+  const totalRows = Math.min(rowCount, 100);
+  const totalPages = Math.ceil(totalRows / maxRowsPerPage);
 
-      y = drawTableHeader(newPage, boldFont, y, displayFields, colWidths);
-      y = drawTableRows(newPage, font, y, 15, colWidths);
+  const colWidths = calculateColumnWidths(fields, boldFont, contentW, 7);
 
-      // If more fields, add remaining on separate rows
-      if (section.fields.length > 6) {
-        y -= 20;
-        const remainingFields = section.fields.slice(6);
-        const maxCols2 = Math.min(remainingFields.length, 6);
-        const colWidth2 = CONTENT_W / maxCols2;
-        const colWidths2 = Array(maxCols2).fill(colWidth2);
+  let remainingRows = totalRows;
 
-        y = drawTableHeader(newPage, boldFont, y, remainingFields.slice(0, maxCols2), colWidths2);
-        y = drawTableRows(newPage, font, y, 15, colWidths2);
-      }
+  for (let p = 0; p < totalPages; p++) {
+    const page = doc.addPage([pageW, pageH]);
+    let y = drawHeader(
+      page,
+      font,
+      boldFont,
+      fiche,
+      headerColor,
+      pageW,
+      pageH,
+      restaurantName,
+      logoImage
+    );
 
-      drawFooter(newPage, font);
-    } else {
-      page.drawText(section.title, {
-        x: MARGIN, y,
-        size: 12, font: boldFont, color: PRIMARY,
-      });
-      y -= 25;
+    y = drawTableHeader(page, boldFont, y, fields, colWidths, headerColor);
 
-      const maxCols = Math.min(section.fields.length, 5);
-      const colWidth = CONTENT_W / maxCols;
-      const colWidths = Array(maxCols).fill(colWidth);
-      const displayFields = section.fields.slice(0, maxCols);
+    const rowsThisPage = Math.min(remainingRows, maxRowsPerPage);
+    y = drawTableRows(page, font, y, rowsThisPage, colWidths, headerColor);
+    remainingRows -= rowsThisPage;
 
-      y = drawTableHeader(page, boldFont, y, displayFields, colWidths);
-      y = drawTableRows(page, font, y, 10, colWidths);
-    }
+    drawFooter(page, font, pageW, headerColor);
   }
-
-  drawFooter(page, font);
 
   return doc.save();
 }
@@ -243,56 +370,80 @@ export async function generateAllFichesPDF(): Promise<Uint8Array> {
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const boldFont = await doc.embedFont(StandardFonts.HelveticaBold);
 
+  const pageW = 595.28;
+  const pageH = 841.89;
+
   // Cover page
-  const cover = doc.addPage([PAGE_W, PAGE_H]);
+  const cover = doc.addPage([pageW, pageH]);
+  const primary = rgb(DEFAULT_PRIMARY.r, DEFAULT_PRIMARY.g, DEFAULT_PRIMARY.b);
 
   cover.drawRectangle({
-    x: 0, y: PAGE_H - 200,
-    width: PAGE_W, height: 200,
-    color: PRIMARY,
+    x: 0,
+    y: pageH - 160,
+    width: pageW,
+    height: 160,
+    color: primary,
   });
 
   cover.drawText("FICHES HACCP", {
-    x: MARGIN, y: PAGE_H - 80,
-    size: 36, font: boldFont, color: WHITE,
+    x: MARGIN,
+    y: pageH - 65,
+    size: 32,
+    font: boldFont,
+    color: WHITE,
   });
 
   cover.drawText("Pack complet — Toutes les fiches de contrôle HACCP", {
-    x: MARGIN, y: PAGE_H - 115,
-    size: 14, font, color: WHITE,
+    x: MARGIN,
+    y: pageH - 95,
+    size: 12,
+    font,
+    color: WHITE,
   });
 
   cover.drawText("Conformes à la réglementation française en vigueur", {
-    x: MARGIN, y: PAGE_H - 140,
-    size: 11, font, color: rgb(200 / 255, 230 / 255, 220 / 255),
+    x: MARGIN,
+    y: pageH - 115,
+    size: 10,
+    font,
+    color: rgb(0.8, 0.9, 0.85),
   });
 
   cover.drawText("fiche-haccp.fr", {
-    x: MARGIN, y: PAGE_H - 175,
-    size: 10, font, color: WHITE,
+    x: MARGIN,
+    y: pageH - 140,
+    size: 9,
+    font,
+    color: WHITE,
   });
 
-  let y = PAGE_H - 240;
+  let y = pageH - 200;
   cover.drawText("Contenu du pack :", {
-    x: MARGIN, y,
-    size: 14, font: boldFont, color: PRIMARY,
+    x: MARGIN,
+    y,
+    size: 13,
+    font: boldFont,
+    color: primary,
   });
-  y -= 30;
+  y -= 28;
 
   for (const fiche of FICHES) {
-    cover.drawText(`• ${fiche.title}`, {
-      x: MARGIN + 10, y,
-      size: 10, font, color: TEXT_COLOR,
-      maxWidth: CONTENT_W - 20,
+    cover.drawText(`•  ${fiche.title}`, {
+      x: MARGIN + 8,
+      y,
+      size: 10,
+      font,
+      color: TEXT_COLOR,
+      maxWidth: pageW - MARGIN * 2 - 16,
     });
-    y -= 18;
+    y -= 20;
   }
 
-  drawFooter(cover, font);
+  drawFooter(cover, font, pageW, DEFAULT_PRIMARY);
 
   // Generate each fiche and merge
   for (const fiche of FICHES) {
-    const fichePdf = await generateFichePDF(fiche);
+    const fichePdf = await generateFichePDF({ fiche });
     const ficheDoc = await PDFDocument.load(fichePdf);
     const pages = await doc.copyPages(ficheDoc, ficheDoc.getPageIndices());
     pages.forEach((p) => doc.addPage(p));

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { ClipboardList } from "lucide-react";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,7 +18,7 @@ export function Header() {
     <header className="bg-primary text-white sticky top-0 z-50 shadow-md">
       <nav className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <span className="text-2xl" aria-hidden="true">📋</span>
+          <ClipboardList className="w-6 h-6" />
           <span className="hidden sm:inline">Fiche HACCP</span>
           <span className="sm:hidden">HACCP</span>
         </Link>

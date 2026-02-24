@@ -9,6 +9,7 @@ export async function GET() {
     shortTitle: f.shortTitle,
     icon: f.icon,
     category: f.category,
+    pdfSections: f.pdfSections,
   }));
 
   return NextResponse.json({ fiches });

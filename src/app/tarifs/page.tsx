@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 const FREE_FEATURES = [
   "Téléchargement de toutes les fiches HACCP en PDF",
-  "12 fiches conformes à la réglementation",
+  "8 fiches conformes à la réglementation",
   "Mises à jour des documents",
   "Format prêt à imprimer",
 ];

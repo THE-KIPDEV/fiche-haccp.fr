@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       if (!fiche) {
         return NextResponse.json({ error: "Fiche non trouvée" }, { status: 404 });
       }
-      pdfBytes = await generateFichePDF(fiche);
+      pdfBytes = await generateFichePDF({ fiche });
       filename = `fiche-haccp-${slug}.pdf`;
     }
 

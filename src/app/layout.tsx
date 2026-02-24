@@ -23,7 +23,6 @@ export const metadata: Metadata = {
   keywords: [
     "fiche HACCP",
     "HACCP restaurant",
-    "fiche contrôle températures",
     "fiche traçabilité restaurant",
     "plan nettoyage restaurant",
     "fiche HACCP PDF gratuit",
@@ -32,7 +31,9 @@ export const metadata: Metadata = {
     "plan de maîtrise sanitaire",
     "hygiène alimentaire restaurant",
     "règlement CE 852/2004",
-    "fiche allergènes restaurant",
+    "fiche non-conformité HACCP",
+    "refroidissement rapide HACCP",
+    "réception marchandises HACCP",
   ],
   authors: [{ name: "Fiche HACCP" }],
   openGraph: {

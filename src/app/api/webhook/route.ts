@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { query, initDatabase } from "@/lib/db";
+import { sendMail, subscriptionConfirmEmailHtml, subscriptionCancelEmailHtml } from "@/lib/mail";
 import Stripe from "stripe";
 
 export async function POST(request: NextRequest) {
@@ -40,7 +41,24 @@ export async function POST(request: NextRequest) {
             "UPDATE users SET subscription_status = 'active', subscription_id = ? WHERE id = ?",
             [subscriptionId, userId]
           );
-          console.log(`Subscription activated for user ${userId}`);
+
+          // Send confirmation email
+          try {
+            const users = await query<Array<{ name: string; email: string }>>(
+              "SELECT name, email FROM users WHERE id = ?",
+              [userId]
+            );
+            if (users[0]) {
+              await sendMail({
+                to: users[0].email,
+                toName: users[0].name,
+                subject: "Abonnement Pro activé — Fiche HACCP",
+                html: subscriptionConfirmEmailHtml(users[0].name),
+              });
+            }
+          } catch {
+            // Non-blocking
+          }
         }
         break;
       }
@@ -74,11 +92,28 @@ export async function POST(request: NextRequest) {
       case "customer.subscription.deleted": {
         const subscription = event.data.object as Stripe.Subscription;
 
+        // Send cancellation email
+        try {
+          const users = await query<Array<{ name: string; email: string }>>(
+            "SELECT name, email FROM users WHERE subscription_id = ?",
+            [subscription.id]
+          );
+          if (users[0]) {
+            await sendMail({
+              to: users[0].email,
+              toName: users[0].name,
+              subject: "Abonnement annulé — Fiche HACCP",
+              html: subscriptionCancelEmailHtml(users[0].name),
+            });
+          }
+        } catch {
+          // Non-blocking
+        }
+
         await query(
           "UPDATE users SET subscription_status = 'canceled', subscription_id = NULL WHERE subscription_id = ?",
           [subscription.id]
         );
-        console.log(`Subscription canceled: ${subscription.id}`);
         break;
       }
 

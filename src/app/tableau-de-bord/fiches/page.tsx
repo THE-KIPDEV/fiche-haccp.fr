@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Fiche {
   id: number;
@@ -72,7 +73,7 @@ export default function FichesDownloadPage() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold">Fiches HACCP en PDF</h1>
-          <p className="text-gray-500 text-sm mt-1">Téléchargez gratuitement toutes les fiches</p>
+          <p className="text-gray-500 text-sm mt-1">Téléchargez ou personnalisez vos fiches</p>
         </div>
         <button
           onClick={handleDownloadAll}
@@ -86,18 +87,25 @@ export default function FichesDownloadPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {fiches.map((fiche) => (
           <div key={fiche.id} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-3">
-            <span className="text-2xl" aria-hidden="true">{fiche.icon}</span>
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-sm truncate">{fiche.shortTitle}</h3>
               <p className="text-xs text-gray-500 truncate">{fiche.title}</p>
             </div>
-            <button
-              onClick={() => handleDownload(fiche.slug)}
-              disabled={downloading === fiche.slug}
-              className="text-primary hover:text-primary-light font-medium text-sm whitespace-nowrap disabled:opacity-50"
-            >
-              {downloading === fiche.slug ? "..." : "PDF ↓"}
-            </button>
+            <div className="flex items-center gap-2">
+              <Link
+                href={`/tableau-de-bord/fiches/${fiche.slug}/builder`}
+                className="text-xs border border-gray-300 text-gray-600 hover:bg-gray-50 px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+              >
+                Personnaliser
+              </Link>
+              <button
+                onClick={() => handleDownload(fiche.slug)}
+                disabled={downloading === fiche.slug}
+                className="text-primary hover:text-primary-light font-medium text-sm whitespace-nowrap disabled:opacity-50"
+              >
+                {downloading === fiche.slug ? "..." : "PDF"}
+              </button>
+            </div>
           </div>
         ))}
       </div>

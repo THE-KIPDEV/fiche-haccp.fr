@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { FICHES, getFicheBySlug, CATEGORIES } from "@/lib/fiches";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { CTABanner } from "@/components/CTABanner";
+import { FicheIcon } from "@/components/FicheIcon";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -37,6 +38,8 @@ export default async function FicheDetailPage({ params }: PageProps) {
     "@type": "Article",
     headline: fiche.title,
     description: fiche.description,
+    datePublished: "2025-01-15",
+    dateModified: "2026-02-24",
     author: { "@type": "Organization", name: "Fiche HACCP", url: "https://fiche-haccp.fr" },
     publisher: { "@type": "Organization", name: "Fiche HACCP" },
     mainEntityOfPage: `https://fiche-haccp.fr/fiches-haccp/${fiche.slug}`,
@@ -58,8 +61,9 @@ export default async function FicheDetailPage({ params }: PageProps) {
           <header className="mb-8">
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
               {category && (
-                <span className="bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
-                  {category.icon} {category.label}
+                <span className="bg-primary/10 text-primary px-3 py-1 rounded-full font-medium inline-flex items-center gap-1.5">
+                  <FicheIcon name={category.icon} className="w-3.5 h-3.5" />
+                  {category.label}
                 </span>
               )}
               <span className="bg-accent/10 text-accent-dark px-3 py-1 rounded-full font-medium">
@@ -155,8 +159,10 @@ export default async function FicheDetailPage({ params }: PageProps) {
                   href={`/fiches-haccp/${f.slug}`}
                   className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow"
                 >
-                  <span className="text-2xl" aria-hidden="true">{f.icon}</span>
-                  <h3 className="font-semibold mt-2">{f.shortTitle}</h3>
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
+                    <FicheIcon name={f.icon} className="w-4 h-4 text-primary" />
+                  </div>
+                  <h3 className="font-semibold">{f.shortTitle}</h3>
                   <p className="text-sm text-gray-500 mt-1 line-clamp-2">{f.description}</p>
                 </Link>
               ))}
