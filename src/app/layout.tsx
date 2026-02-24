@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nunito_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import { Navbar } from "@/components/Navbar";
+import { BottomNav } from "@/components/BottomNav";
 
-const inter = Inter({
+const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-nunito",
 });
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Fiche HACCP",
   },
   description:
-    "Téléchargez gratuitement les fiches HACCP pour restaurant. Gérez vos contrôles de température, nettoyage, traçabilité et employés en ligne. PDF conformes à la réglementation française.",
+    "Les fiches HACCP que la DDPP exige lors d'un contrôle sanitaire en restaurant. Températures, nettoyage, traçabilité, réception marchandises. PDF gratuits, conformes au règlement CE 852/2004.",
   keywords: [
     "fiche HACCP",
     "HACCP restaurant",
@@ -43,15 +43,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
     siteName: "Fiche HACCP",
-    title: "Fiches HACCP Restaurant Gratuites – PDF à Télécharger",
+    title: "Fiches HACCP Restaurant – PDF gratuits conformes",
     description:
-      "Toutes les fiches HACCP obligatoires pour votre restaurant. Téléchargement gratuit, documents conformes à la réglementation.",
+      "Les fiches de contrôle HACCP exigées par la DDPP. Températures, nettoyage, traçabilité. Téléchargement gratuit.",
   },
   twitter: {
     card: "summary_large_image",
     title: "Fiches HACCP Restaurant – PDF Gratuits",
     description:
-      "Téléchargez gratuitement les fiches HACCP obligatoires pour votre restaurant. Documents conformes, prêts à imprimer.",
+      "Les fiches de contrôle HACCP que la DDPP demande lors d'un contrôle. PDF gratuits et conformes.",
   },
   alternates: {
     canonical: "/",
@@ -76,10 +76,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <Header />
+      <body className={`${nunitoSans.variable} font-sans antialiased`}>
+        <Navbar />
         {children}
-        <Footer />
+        <BottomNav />
         <Script
           defer
           src="https://kipstats.com/tracker.js"

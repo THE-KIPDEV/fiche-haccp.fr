@@ -1,29 +1,29 @@
 import Link from "next/link";
 import { FICHES, CATEGORIES } from "@/lib/fiches";
 import { FicheCard } from "@/components/FicheCard";
-import { CTABanner } from "@/components/CTABanner";
+import { UpgradeBanner } from "@/components/UpgradeBanner";
 import { Scale, Shield, BarChart3, Thermometer, SprayCan, Users, Bell } from "lucide-react";
 
 const FAQ_ITEMS = [
   {
-    q: "Qu'est-ce que le HACCP en restauration ?",
-    a: "Le HACCP (Hazard Analysis Critical Control Point) est une méthode de maîtrise de la sécurité sanitaire des aliments. Obligatoire en restauration depuis le règlement CE 852/2004, il impose l'identification des dangers, la définition de points de contrôle critiques et la mise en place de procédures de surveillance. Chaque restaurant doit disposer d'un Plan de Maîtrise Sanitaire (PMS) intégrant les principes HACCP.",
+    q: "Le HACCP, c'est quoi concrètement ?",
+    a: "HACCP signifie Hazard Analysis Critical Control Point. En clair, c'est une méthode pour identifier les risques sanitaires dans votre cuisine et mettre en place des contrôles pour les éviter. Le règlement CE 852/2004 l'impose à tous les restaurants. Chaque établissement doit avoir un Plan de Maîtrise Sanitaire (PMS) qui intègre ces principes.",
   },
   {
-    q: "Les fiches HACCP sont-elles obligatoires pour un restaurant ?",
-    a: "Oui. Tout exploitant du secteur alimentaire doit mettre en place des procédures de type HACCP et conserver des documents de traçabilité (règlement CE 852/2004, arrêté du 21 décembre 2009). Les fiches de contrôle des températures, de traçabilité et de nettoyage font partie du Plan de Maîtrise Sanitaire obligatoire. Ces documents peuvent être demandés lors d'un contrôle de la DDPP.",
+    q: "On risque quoi si on n'a pas les fiches ?",
+    a: "Lors d'un contrôle de la DDPP, l'absence de documents HACCP peut mener à un avertissement, une mise en demeure, une fermeture administrative temporaire, ou une amende allant jusqu'à 1 500 € (contravention de 5ème classe). Si un problème sanitaire survient en parallèle, les sanctions pénales montent vite.",
   },
   {
-    q: "Combien de temps conserver les fiches HACCP ?",
-    a: "Les fiches HACCP et documents de traçabilité doivent être conservés pendant 5 ans minimum. Cette durée correspond au délai de prescription en matière de sécurité alimentaire. Conservez les fiches remplies, les bons de livraison, les fiches de non-conformité et les rapports de maintenance dans un classeur dédié.",
+    q: "Combien de temps garder les fiches remplies ?",
+    a: "5 ans minimum. C'est le délai de prescription en matière de sécurité alimentaire. Gardez vos fiches de température, bons de livraison, fiches de non-conformité et rapports de maintenance dans un classeur dédié. Ou mieux : passez au numérique et tout est archivé automatiquement.",
   },
   {
-    q: "Que risque un restaurant sans fiches HACCP ?",
-    a: "En cas de contrôle de la DDPP, l'absence de documents HACCP peut entraîner : un avertissement, une mise en demeure avec délai de mise en conformité, une fermeture administrative temporaire, ou une amende pouvant aller jusqu'à 1 500€ (contravention de 5ème classe). En cas de problème sanitaire grave, les sanctions pénales sont plus lourdes.",
+    q: "C'est vraiment gratuit ?",
+    a: "Oui, les fiches PDF sont téléchargeables gratuitement après inscription. Aucune carte bancaire demandée. L'abonnement Pro à 20 €/mois est optionnel : il ajoute la gestion des employés, les tâches HACCP automatisées et le suivi en temps réel.",
   },
   {
-    q: "Le téléchargement des fiches HACCP est-il gratuit ?",
-    a: "Oui, toutes nos fiches HACCP sont téléchargeables gratuitement au format PDF après inscription. Nos fiches sont conformes à la réglementation française en vigueur. L'abonnement Pro à 20€/mois donne accès à la gestion complète : employés, tâches HACCP, traçabilité et suivi en temps réel.",
+    q: "Est-ce que ça remplace la formation HACCP ?",
+    a: "Non. Depuis 2012, au moins une personne par restaurant doit avoir suivi la formation hygiène alimentaire de 14 heures. Nos fiches vous aident à appliquer ce que vous avez appris en formation, mais ne la remplacent pas.",
   },
 ];
 
@@ -33,7 +33,7 @@ export default function HomePage() {
     "@type": "WebSite",
     name: "Fiche HACCP",
     url: "https://fiche-haccp.fr",
-    description: "Fiches HACCP gratuites pour restaurant – Téléchargement PDF",
+    description: "Les fiches de contrôle HACCP exigées par la DDPP lors d'un contrôle sanitaire en restaurant.",
     potentialAction: {
       "@type": "SearchAction",
       target: "https://fiche-haccp.fr/fiches-haccp?q={search_term_string}",
@@ -61,52 +61,53 @@ export default function HomePage() {
 
       <main>
         {/* Hero */}
-        <section className="bg-gradient-to-br from-primary-dark via-primary to-primary-light text-white py-12 md:py-20">
-          <div className="max-w-6xl mx-auto px-4 text-center">
+        <section className="bg-gradient-to-br from-c-brand-deep via-c-brand to-c-brand-light text-white py-12 md:py-20">
+          <div className="max-w-5xl mx-auto px-4 text-center">
             <h1 className="text-3xl md:text-5xl font-extrabold mb-6 leading-tight">
-              Fiches HACCP gratuites<br className="hidden md:block" /> pour votre restaurant
+              Toutes les fiches HACCP exigées par la DDPP,
+              <br className="hidden md:block" /> prêtes à remplir
             </h1>
             <p className="text-lg md:text-xl text-emerald-100 max-w-3xl mx-auto mb-8">
-              Toutes les fiches de contrôle HACCP obligatoires au format PDF.
-              Conformes au <strong>règlement CE 852/2004</strong> et à l&apos;arrêté du 21 décembre 2009.
+              Relevés de température, traçabilité, nettoyage, réception marchandises&hellip;
+              Les fiches que l&apos;inspecteur sanitaire attend dans votre classeur.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/inscription"
-                className="bg-accent hover:bg-accent-dark text-gray-900 font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg"
+                className="bg-c-accent hover:bg-c-accent-dark text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-colors shadow-lg"
               >
                 Télécharger les fiches
               </Link>
               <Link
                 href="/fiches-haccp"
-                className="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-xl border border-white/20 transition-colors"
+                className="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-lg border border-white/20 transition-colors"
               >
                 Voir toutes les fiches
               </Link>
             </div>
-            <p className="text-sm text-emerald-200 mt-4">Inscription gratuite — Aucune carte bancaire nécessaire</p>
+            <p className="text-sm text-emerald-200 mt-4">Téléchargement libre, sans engagement.</p>
           </div>
         </section>
 
         {/* Stats */}
         <section className="py-10 bg-gray-50 border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="max-w-5xl mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div>
-                <p className="text-3xl font-bold text-primary">{FICHES.length}</p>
-                <p className="text-sm text-gray-600">Fiches HACCP</p>
+                <p className="text-3xl font-bold text-c-brand">{FICHES.length}</p>
+                <p className="text-sm text-gray-600">fiches disponibles</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-primary">100%</p>
-                <p className="text-sm text-gray-600">Conformes</p>
+                <p className="text-3xl font-bold text-c-brand">CE 852/2004</p>
+                <p className="text-sm text-gray-600">conformité</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-primary">PDF</p>
-                <p className="text-sm text-gray-600">Prêts à imprimer</p>
+                <p className="text-3xl font-bold text-c-brand">PDF</p>
+                <p className="text-sm text-gray-600">prêts à imprimer</p>
               </div>
               <div>
-                <p className="text-3xl font-bold text-primary">Gratuit</p>
-                <p className="text-sm text-gray-600">Téléchargement</p>
+                <p className="text-3xl font-bold text-c-brand">0 €</p>
+                <p className="text-sm text-gray-600">pour les fiches</p>
               </div>
             </div>
           </div>
@@ -116,11 +117,11 @@ export default function HomePage() {
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-4">
-              Toutes les fiches HACCP obligatoires
+              Les fiches que la DDPP vous demandera
             </h2>
             <p className="text-gray-600 text-center max-w-2xl mx-auto mb-12">
-              Les fiches de contrôle indispensables pour votre Plan de Maîtrise Sanitaire (PMS),
-              conformes à la réglementation française.
+              Chaque fiche correspond à un point de contrôle de votre Plan de Maîtrise Sanitaire.
+              Cliquez pour télécharger le PDF ou voir le détail.
             </p>
 
             {CATEGORIES.map((cat) => {
@@ -139,37 +140,60 @@ export default function HomePage() {
                 </div>
               );
             })}
+
+            {/* Cross-links */}
+            <div className="bg-emerald-50 rounded-lg p-6 mt-8">
+              <h3 className="font-bold text-gray-900 mb-3">
+                Le HACCP ne fait pas tout
+              </h3>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                Le HACCP s&apos;inscrit dans un ensemble plus large d&apos;obligations pour les restaurateurs.
+                Vérifiez que vos{" "}
+                <a href="https://affichage-obligatoire-restaurant.fr" className="text-c-brand font-medium underline">
+                  affichages obligatoires
+                </a>{" "}
+                sont en place, que votre{" "}
+                <a href="https://tableau-allergenes.fr" className="text-c-brand font-medium underline">
+                  tableau des allergènes
+                </a>{" "}
+                est à jour, et que l&apos;
+                <a href="https://origine-viande.fr" className="text-c-brand font-medium underline">
+                  affichage de l&apos;origine des viandes
+                </a>{" "}
+                est bien en place depuis le décret de février 2025.
+              </p>
+            </div>
           </div>
         </section>
 
         {/* Online HACCP management */}
         <section className="py-16 bg-gradient-to-b from-white to-gray-50">
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="max-w-5xl mx-auto px-4">
             <div className="text-center mb-10">
-              <span className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-wide">
+              <span className="text-xs font-semibold text-c-brand bg-c-brand/10 px-3 py-1 rounded-full uppercase tracking-wide">
                 Gestion en ligne
               </span>
               <h2 className="text-2xl md:text-3xl font-bold mt-4">
-                Gérez votre HACCP en ligne
+                Passez du classeur papier au numérique
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto mt-3">
-                Au-delà des fiches PDF, passez au numérique. Suivez vos contrôles
-                quotidiens, gérez vos employés et recevez des alertes automatiques.
+                Les fiches PDF c&apos;est bien pour démarrer. L&apos;outil en ligne va plus loin :
+                suivi des contrôles, gestion des employés, alertes automatiques.
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {[
-                { icon: Thermometer, title: "Relevés de température", desc: "Enregistrez vos contrôles de température en quelques secondes depuis votre tableau de bord." },
-                { icon: SprayCan, title: "Checklists nettoyage", desc: "Validez vos opérations de nettoyage avec un simple clic. Historique complet conservé." },
-                { icon: Users, title: "Gestion des employés", desc: "Assignez les tâches HACCP à vos employés et suivez qui fait quoi." },
-                { icon: Bell, title: "Rappels automatiques", desc: "Recevez un email quotidien si des tâches HACCP sont en retard." },
-                { icon: BarChart3, title: "Tableau de bord", desc: "Visualisez votre taux de conformité du jour et identifiez les retards en un coup d'oeil." },
-                { icon: Shield, title: "Historique 5 ans", desc: "Tous vos relevés sont conservés et disponibles en cas de contrôle DDPP." },
+                { icon: Thermometer, title: "Relevés de température", desc: "Enregistrez vos contrôles depuis le tableau de bord. Plus de papier qui traîne." },
+                { icon: SprayCan, title: "Checklists nettoyage", desc: "Un clic pour valider une opération de nettoyage. L'historique est conservé automatiquement." },
+                { icon: Users, title: "Gestion des employés", desc: "Assignez les tâches HACCP à chaque membre de l'équipe. Vous voyez qui fait quoi." },
+                { icon: Bell, title: "Rappels automatiques", desc: "Un email part chaque matin si des tâches sont en retard. Rien ne passe entre les mailles." },
+                { icon: BarChart3, title: "Tableau de bord", desc: "Votre taux de conformité du jour en un coup d'oeil. Identifiez les retards immédiatement." },
+                { icon: Shield, title: "Historique 5 ans", desc: "Tous les relevés sont archivés. En cas de contrôle DDPP, tout est prêt." },
               ].map((item, i) => (
-                <div key={i} className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                    <item.icon className="w-5 h-5 text-primary" />
+                <div key={i} className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                  <div className="w-10 h-10 rounded-lg bg-c-brand/10 flex items-center justify-center mb-3">
+                    <item.icon className="w-5 h-5 text-c-brand" />
                   </div>
                   <h3 className="font-semibold mb-1">{item.title}</h3>
                   <p className="text-sm text-gray-600">{item.desc}</p>
@@ -180,53 +204,53 @@ export default function HomePage() {
             <div className="text-center mt-8">
               <Link
                 href="/inscription"
-                className="inline-block bg-primary hover:bg-primary-light text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+                className="inline-block bg-c-brand hover:bg-c-brand-light text-white font-semibold px-8 py-3 rounded-lg transition-colors"
               >
                 Essayer gratuitement
               </Link>
-              <p className="text-xs text-gray-500 mt-2">20€/mois pour la gestion complète — sans engagement</p>
+              <p className="text-xs text-gray-500 mt-2">20 €/mois pour la gestion complète, sans engagement</p>
             </div>
           </div>
         </section>
 
         {/* Why HACCP */}
         <section className="py-16 bg-gray-50">
-          <div className="max-w-6xl mx-auto px-4">
+          <div className="max-w-5xl mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-              Pourquoi les fiches HACCP sont indispensables
+              Un contrôle DDPP sans fiches HACCP, ça se termine mal
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <article className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                  <Scale className="w-5 h-5 text-primary" />
+              <article className="bg-white rounded-lg p-6 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-c-brand/10 flex items-center justify-center mb-3">
+                  <Scale className="w-5 h-5 text-c-brand" />
                 </div>
-                <h3 className="font-bold text-lg mb-2">Obligation légale</h3>
+                <h3 className="font-bold text-lg mb-2">La loi est claire</h3>
                 <p className="text-gray-600 text-sm">
-                  Le règlement CE 852/2004 et l&apos;arrêté du 21 décembre 2009 imposent à tout restaurant
-                  de documenter ses procédures HACCP. Les fiches de contrôle constituent
-                  la preuve de votre conformité lors des contrôles sanitaires.
+                  Le règlement CE 852/2004 impose à tout restaurant de documenter
+                  ses procédures HACCP. Les fiches constituent la preuve de votre
+                  conformité. Sans elles, l&apos;inspecteur rédige un PV.
                 </p>
               </article>
-              <article className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                  <Shield className="w-5 h-5 text-primary" />
+              <article className="bg-white rounded-lg p-6 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-c-brand/10 flex items-center justify-center mb-3">
+                  <Shield className="w-5 h-5 text-c-brand" />
                 </div>
-                <h3 className="font-bold text-lg mb-2">Protection sanitaire</h3>
+                <h3 className="font-bold text-lg mb-2">Vos clients d&apos;abord</h3>
                 <p className="text-gray-600 text-sm">
-                  Les fiches HACCP permettent de détecter et prévenir les risques sanitaires :
-                  rupture de la chaîne du froid, contamination croisée.
-                  Elles protègent vos clients et votre établissement.
+                  Rupture de la chaîne du froid, contamination croisée, allergènes
+                  non déclarés : les fiches HACCP permettent de détecter les risques
+                  avant qu&apos;il ne soit trop tard.
                 </p>
               </article>
-              <article className="bg-white rounded-xl p-6 shadow-sm">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                  <BarChart3 className="w-5 h-5 text-primary" />
+              <article className="bg-white rounded-lg p-6 shadow-sm">
+                <div className="w-10 h-10 rounded-lg bg-c-brand/10 flex items-center justify-center mb-3">
+                  <BarChart3 className="w-5 h-5 text-c-brand" />
                 </div>
-                <h3 className="font-bold text-lg mb-2">Gestion simplifiée</h3>
+                <h3 className="font-bold text-lg mb-2">Du papier au numérique</h3>
                 <p className="text-gray-600 text-sm">
-                  Passez du papier au numérique. Gérez vos employés,
-                  assignez les tâches HACCP, suivez la traçabilité et exportez vos données.
-                  Tout en un seul endroit pour 20€/mois.
+                  Commencez avec les fiches PDF gratuites. Quand vous êtes prêt,
+                  passez à la gestion en ligne : employés, tâches, traçabilité,
+                  tout centralisé pour 20 €/mois.
                 </p>
               </article>
             </div>
@@ -234,22 +258,23 @@ export default function HomePage() {
         </section>
 
         {/* CTA */}
-        <div className="max-w-6xl mx-auto px-4">
-          <CTABanner />
+        <div className="max-w-5xl mx-auto px-4">
+          <UpgradeBanner />
         </div>
 
         {/* FAQ */}
         <section className="py-16">
           <div className="max-w-4xl mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-              Questions fréquentes sur le HACCP
+              Les questions qu&apos;on nous pose tout le temps
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {FAQ_ITEMS.map((item, i) => (
-                <details key={i} className="bg-white border border-gray-200 rounded-xl p-5 group">
+                <details key={i} className="border-l-4 border-c-brand bg-white p-5 group">
                   <summary className="font-semibold text-gray-900 cursor-pointer list-none flex items-center justify-between">
                     {item.q}
-                    <span className="text-primary group-open:rotate-180 transition-transform ml-2">&#9660;</span>
+                    <span className="text-gray-400 ml-2 group-open:hidden">+</span>
+                    <span className="text-gray-400 ml-2 hidden group-open:inline">&minus;</span>
                   </summary>
                   <p className="text-gray-600 mt-3 text-sm leading-relaxed">{item.a}</p>
                 </details>
