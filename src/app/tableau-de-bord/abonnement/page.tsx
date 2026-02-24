@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Bell, Lock } from "lucide-react";
 
 interface UserInfo {
   subscription_status: string;
@@ -13,6 +14,8 @@ export default function AbonnementPage() {
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [reminderEnabled, setReminderEnabled] = useState(true);
+  const [reminderSaving, setReminderSaving] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -20,10 +23,32 @@ export default function AbonnementPage() {
         if (!r.ok) { router.push("/connexion"); return null; }
         return r.json();
       })
-      .then((data) => { if (data) setUser(data.user); })
+      .then((data) => {
+        if (!data) return;
+        setUser(data.user);
+        if (data.user.subscription_status === "active") {
+          fetch("/api/auth/preferences").then(r => r.ok ? r.json() : null).then(d => {
+            if (d) setReminderEnabled(d.reminder_enabled);
+          }).catch(() => {});
+        }
+      })
       .catch(() => router.push("/connexion"))
       .finally(() => setLoading(false));
   }, [router]);
+
+  async function toggleReminder() {
+    setReminderSaving(true);
+    const newValue = !reminderEnabled;
+    try {
+      const res = await fetch("/api/auth/preferences", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reminder_enabled: newValue }),
+      });
+      if (res.ok) setReminderEnabled(newValue);
+    } catch { /* ignore */ }
+    setReminderSaving(false);
+  }
 
   async function handleSubscribe() {
     setCheckoutLoading(true);
@@ -87,6 +112,28 @@ export default function AbonnementPage() {
           <p className="text-xs text-gray-500 mt-4">
             Gérez votre abonnement, mettez à jour votre moyen de paiement ou annulez via le portail Stripe sécurisé.
           </p>
+
+          {/* Reminder toggle */}
+          <div className="border-t border-gray-200 mt-6 pt-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Bell className="w-5 h-5 text-primary" />
+                <div>
+                  <p className="text-sm font-medium">Rappels email quotidiens</p>
+                  <p className="text-xs text-gray-500">Recevez un email si des taches HACCP sont en retard</p>
+                </div>
+              </div>
+              <button
+                onClick={toggleReminder}
+                disabled={reminderSaving}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${reminderEnabled ? "bg-primary" : "bg-gray-300"}`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${reminderEnabled ? "translate-x-6" : "translate-x-1"}`}
+                />
+              </button>
+            </div>
+          </div>
         </div>
       ) : (
         <div className="bg-white rounded-2xl border-2 border-primary p-8">
@@ -119,7 +166,7 @@ export default function AbonnementPage() {
           </button>
 
           <div className="flex items-center justify-center gap-4 mt-4 text-xs text-gray-500">
-            <span>🔒 Paiement sécurisé Stripe</span>
+            <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> Paiement securise Stripe</span>
             <span>Visa, Mastercard, CB</span>
           </div>
         </div>

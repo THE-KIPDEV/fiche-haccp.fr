@@ -102,6 +102,18 @@ export async function initDatabase(): Promise<void> {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
   `);
 
+  // Migrations — add columns/indexes to existing tables
+  try {
+    await p.execute("ALTER TABLE users ADD COLUMN reminder_enabled TINYINT(1) DEFAULT 1");
+  } catch {
+    // Column already exists
+  }
+  try {
+    await p.execute("ALTER TABLE task_logs ADD INDEX idx_task_completed (task_id, completed_at)");
+  } catch {
+    // Index already exists
+  }
+
   await p.execute(`
     CREATE TABLE IF NOT EXISTS pdf_preferences (
       id INT AUTO_INCREMENT PRIMARY KEY,

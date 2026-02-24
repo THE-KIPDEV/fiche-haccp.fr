@@ -94,6 +94,48 @@ export function subscriptionConfirmEmailHtml(name: string): string {
   `);
 }
 
+export function dailyReminderEmailHtml(
+  name: string,
+  tasks: Array<{ title: string; category: string; daysSinceLastDone: number }>
+): string {
+  const taskRows = tasks.map(t => `
+    <tr>
+      <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:14px">${t.title}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:14px;color:#6b7280">${t.category}</td>
+      <td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:14px;color:#ef4444;font-weight:600">
+        ${t.daysSinceLastDone > 0 ? `${t.daysSinceLastDone}j de retard` : "A faire aujourd'hui"}
+      </td>
+    </tr>
+  `).join("");
+
+  return emailWrapper(`
+    <h2 style="color:#111827;font-size:20px;margin:0 0 12px">Rappel HACCP du jour</h2>
+    <p style="color:#374151;line-height:1.6;margin:0 0 16px">
+      Bonjour ${name}, vous avez <strong>${tasks.length} tache${tasks.length > 1 ? "s" : ""}</strong>
+      HACCP en attente ou en retard :
+    </p>
+    <table style="width:100%;border-collapse:collapse;margin:0 0 20px">
+      <thead>
+        <tr style="background:#f9fafb">
+          <th style="padding:8px 12px;text-align:left;font-size:13px;color:#6b7280;border-bottom:2px solid #e5e7eb">Tache</th>
+          <th style="padding:8px 12px;text-align:left;font-size:13px;color:#6b7280;border-bottom:2px solid #e5e7eb">Categorie</th>
+          <th style="padding:8px 12px;text-align:left;font-size:13px;color:#6b7280;border-bottom:2px solid #e5e7eb">Statut</th>
+        </tr>
+      </thead>
+      <tbody>${taskRows}</tbody>
+    </table>
+    <a href="https://fiche-haccp.fr/tableau-de-bord"
+       style="display:inline-block;background:#065f46;color:white;padding:12px 24px;text-decoration:none;border-radius:8px;font-weight:600;font-size:14px">
+      Acceder a mon tableau de bord
+    </a>
+    <p style="color:#9ca3af;font-size:12px;margin-top:24px">
+      <a href="https://fiche-haccp.fr/tableau-de-bord/abonnement" style="color:#6b7280;text-decoration:underline">
+        Desactiver les rappels
+      </a>
+    </p>
+  `);
+}
+
 export function subscriptionCancelEmailHtml(name: string): string {
   return emailWrapper(`
     <h2 style="color:#111827;font-size:20px;margin:0 0 12px">Abonnement annulé</h2>

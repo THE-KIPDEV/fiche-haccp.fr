@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { CheckSquare, Users } from "lucide-react";
+import { FREQUENCIES, TASK_CATEGORIES } from "@/lib/constants";
 
 interface Employee {
   id: number;
@@ -18,22 +20,6 @@ interface Task {
   assigned_employee_name?: string;
   active: boolean;
 }
-
-const FREQUENCIES = [
-  { value: "quotidien", label: "Quotidien" },
-  { value: "hebdomadaire", label: "Hebdomadaire" },
-  { value: "mensuel", label: "Mensuel" },
-  { value: "ponctuel", label: "Ponctuel" },
-];
-
-const TASK_CATEGORIES = [
-  { value: "temperatures", label: "Températures" },
-  { value: "nettoyage", label: "Nettoyage" },
-  { value: "tracabilite", label: "Traçabilité" },
-  { value: "reception", label: "Réception" },
-  { value: "equipement", label: "Équipement" },
-  { value: "general", label: "Général" },
-];
 
 export default function TasksPage() {
   const router = useRouter();
@@ -132,7 +118,7 @@ export default function TasksPage() {
   if (!isPro) {
     return (
       <div className="text-center py-16">
-        <span className="text-5xl" aria-hidden="true">✅</span>
+        <CheckSquare className="w-12 h-12 text-gray-300 mx-auto" />
         <h1 className="text-2xl font-bold mt-4 mb-2">Tâches HACCP</h1>
         <p className="text-gray-500 mb-6">Fonctionnalité disponible avec l&apos;abonnement Pro à 20€/mois.</p>
         <a href="/tableau-de-bord/abonnement" className="inline-block bg-primary hover:bg-primary-light text-white font-semibold px-6 py-3 rounded-lg transition-colors">
@@ -243,7 +229,7 @@ export default function TasksPage() {
                     </span>
                     {task.assigned_employee_name && (
                       <span className="text-xs bg-accent/10 text-accent-dark px-2 py-0.5 rounded-full">
-                        👤 {task.assigned_employee_name}
+                        {task.assigned_employee_name}
                       </span>
                     )}
                   </div>

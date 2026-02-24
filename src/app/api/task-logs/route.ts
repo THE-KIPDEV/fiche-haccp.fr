@@ -1,26 +1,45 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { query, initDatabase } from "@/lib/db";
 import { RowDataPacket } from "mysql2";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const auth = await getAuthUser();
     if (!auth) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
     await initDatabase();
-    const logs = await query<RowDataPacket[]>(
-      `SELECT tl.id, tl.task_id, t.title as task_title,
+
+    const { searchParams } = new URL(request.url);
+    const days = searchParams.get("days");
+    const category = searchParams.get("category");
+    const employeeId = searchParams.get("employee_id");
+
+    let sql = `SELECT tl.id, tl.task_id, t.title as task_title, t.category,
               tl.employee_id, e.name as employee_name,
               tl.completed_at, tl.notes, tl.temperature, tl.conformity
        FROM task_logs tl
        JOIN haccp_tasks t ON tl.task_id = t.id
        LEFT JOIN employees e ON tl.employee_id = e.id
-       WHERE tl.user_id = ?
-       ORDER BY tl.completed_at DESC
-       LIMIT 100`,
-      [auth.userId]
-    );
+       WHERE tl.user_id = ?`;
+    const params: (string | number)[] = [auth.userId];
+
+    if (days) {
+      sql += " AND tl.completed_at >= DATE_SUB(NOW(), INTERVAL ? DAY)";
+      params.push(parseInt(days));
+    }
+    if (category) {
+      sql += " AND t.category = ?";
+      params.push(category);
+    }
+    if (employeeId) {
+      sql += " AND tl.employee_id = ?";
+      params.push(parseInt(employeeId));
+    }
+
+    sql += " ORDER BY tl.completed_at DESC LIMIT 200";
+
+    const logs = await query<RowDataPacket[]>(sql, params);
 
     return NextResponse.json({ logs });
   } catch (error) {

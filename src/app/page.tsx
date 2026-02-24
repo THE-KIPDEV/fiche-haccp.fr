@@ -2,7 +2,7 @@ import Link from "next/link";
 import { FICHES, CATEGORIES } from "@/lib/fiches";
 import { FicheCard } from "@/components/FicheCard";
 import { CTABanner } from "@/components/CTABanner";
-import { Scale, Shield, BarChart3 } from "lucide-react";
+import { Scale, Shield, BarChart3, Thermometer, SprayCan, Users, Bell } from "lucide-react";
 
 const FAQ_ITEMS = [
   {
@@ -139,6 +139,53 @@ export default function HomePage() {
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        {/* Online HACCP management */}
+        <section className="py-16 bg-gradient-to-b from-white to-gray-50">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center mb-10">
+              <span className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-wide">
+                Gestion en ligne
+              </span>
+              <h2 className="text-2xl md:text-3xl font-bold mt-4">
+                Gérez votre HACCP en ligne
+              </h2>
+              <p className="text-gray-600 max-w-2xl mx-auto mt-3">
+                Au-delà des fiches PDF, passez au numérique. Suivez vos contrôles
+                quotidiens, gérez vos employés et recevez des alertes automatiques.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[
+                { icon: Thermometer, title: "Relevés de température", desc: "Enregistrez vos contrôles de température en quelques secondes depuis votre tableau de bord." },
+                { icon: SprayCan, title: "Checklists nettoyage", desc: "Validez vos opérations de nettoyage avec un simple clic. Historique complet conservé." },
+                { icon: Users, title: "Gestion des employés", desc: "Assignez les tâches HACCP à vos employés et suivez qui fait quoi." },
+                { icon: Bell, title: "Rappels automatiques", desc: "Recevez un email quotidien si des tâches HACCP sont en retard." },
+                { icon: BarChart3, title: "Tableau de bord", desc: "Visualisez votre taux de conformité du jour et identifiez les retards en un coup d'oeil." },
+                { icon: Shield, title: "Historique 5 ans", desc: "Tous vos relevés sont conservés et disponibles en cas de contrôle DDPP." },
+              ].map((item, i) => (
+                <div key={i} className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                    <item.icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-1">{item.title}</h3>
+                  <p className="text-sm text-gray-600">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              <Link
+                href="/inscription"
+                className="inline-block bg-primary hover:bg-primary-light text-white font-semibold px-8 py-3 rounded-lg transition-colors"
+              >
+                Essayer gratuitement
+              </Link>
+              <p className="text-xs text-gray-500 mt-2">20€/mois pour la gestion complète — sans engagement</p>
+            </div>
           </div>
         </section>
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -15,11 +16,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "https://fiche-haccp.fr"
   ),
   title: {
-    default: "Fiches HACCP Restaurant Gratuites – Téléchargement PDF | fiche-haccp.fr",
+    default: "Fiches HACCP Restaurant Gratuites & Gestion en Ligne | fiche-haccp.fr",
     template: "%s | Fiche HACCP",
   },
   description:
-    "Téléchargez gratuitement toutes les fiches HACCP obligatoires pour votre restaurant. Contrôle des températures, traçabilité, nettoyage, allergènes. PDF conformes à la réglementation française.",
+    "Téléchargez gratuitement les fiches HACCP pour restaurant. Gérez vos contrôles de température, nettoyage, traçabilité et employés en ligne. PDF conformes à la réglementation française.",
   keywords: [
     "fiche HACCP",
     "HACCP restaurant",
@@ -34,6 +35,8 @@ export const metadata: Metadata = {
     "fiche non-conformité HACCP",
     "refroidissement rapide HACCP",
     "réception marchandises HACCP",
+    "gestion HACCP en ligne",
+    "logiciel HACCP restaurant",
   ],
   authors: [{ name: "Fiche HACCP" }],
   openGraph: {
@@ -77,6 +80,12 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <Script
+          defer
+          src="https://kipstats.com/tracker.js"
+          data-site="kp_abf26560"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
