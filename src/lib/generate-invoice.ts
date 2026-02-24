@@ -118,12 +118,18 @@ export async function generateInvoicePdf(data: InvoiceData): Promise<Uint8Array>
   y -= 30;
   page.drawRectangle({ x: MARGIN, y: y - 8, width: CONTENT_WIDTH, height: 30, color: BG_LIGHT });
 
-  const amountEur = (data.amountCents / 100).toFixed(2).replace(".", ",") + " \u20AC";
+  const VAT_RATE = 20;
+  const htCents = Math.round(data.amountCents / (1 + VAT_RATE / 100));
+  const tvaCents = data.amountCents - htCents;
+  const htEur = (htCents / 100).toFixed(2).replace(".", ",") + " \u20AC";
+  const tvaEur = (tvaCents / 100).toFixed(2).replace(".", ",") + " \u20AC";
+  const ttcEur = (data.amountCents / 100).toFixed(2).replace(".", ",") + " \u20AC";
+
   page.drawText(data.description, { x: col1X + 10, y: y, size: 10, font: fontRegular, color: TEXT });
   page.drawText("1", { x: col2X, y: y, size: 10, font: fontRegular, color: TEXT });
-  page.drawText(amountEur, { x: col3X, y: y, size: 10, font: fontRegular, color: TEXT });
-  const amountWidth = fontRegular.widthOfTextAtSize(amountEur, 10);
-  page.drawText(amountEur, { x: col4X - amountWidth - 10, y: y, size: 10, font: fontRegular, color: TEXT });
+  page.drawText(htEur, { x: col3X, y: y, size: 10, font: fontRegular, color: TEXT });
+  const htLineW = fontRegular.widthOfTextAtSize(htEur, 10);
+  page.drawText(htEur, { x: col4X - htLineW - 10, y: y, size: 10, font: fontRegular, color: TEXT });
 
   // Period info (for subscriptions)
   if (data.periodStart && data.periodEnd) {
@@ -138,28 +144,21 @@ export async function generateInvoicePdf(data: InvoiceData): Promise<Uint8Array>
   const totalsX = col3X - 30;
 
   page.drawText("Total HT", { x: totalsX, y, size: 10, font: fontRegular, color: GRAY });
-  const htW = fontRegular.widthOfTextAtSize(amountEur, 10);
-  page.drawText(amountEur, { x: col4X - htW - 10, y, size: 10, font: fontRegular, color: TEXT });
+  const htW = fontRegular.widthOfTextAtSize(htEur, 10);
+  page.drawText(htEur, { x: col4X - htW - 10, y, size: 10, font: fontRegular, color: TEXT });
 
   y -= 20;
-  page.drawText("TVA", { x: totalsX, y, size: 10, font: fontRegular, color: GRAY });
-  const tvaText = "Non applicable";
-  const tvaW = fontRegular.widthOfTextAtSize(tvaText, 10);
-  page.drawText(tvaText, { x: col4X - tvaW - 10, y, size: 10, font: fontRegular, color: GRAY });
+  page.drawText(`TVA (${VAT_RATE}%)`, { x: totalsX, y, size: 10, font: fontRegular, color: GRAY });
+  const tvaW = fontRegular.widthOfTextAtSize(tvaEur, 10);
+  page.drawText(tvaEur, { x: col4X - tvaW - 10, y, size: 10, font: fontRegular, color: TEXT });
 
   y -= 8;
   page.drawRectangle({ x: totalsX, y, width: col4X - totalsX, height: 0.5, color: BORDER });
 
   y -= 20;
   page.drawText("Total TTC", { x: totalsX, y, size: 12, font: fontBold, color: TEXT });
-  const ttcW = fontBold.widthOfTextAtSize(amountEur, 12);
-  page.drawText(amountEur, { x: col4X - ttcW - 10, y, size: 12, font: fontBold, color: PRIMARY });
-
-  // TVA note
-  y -= 40;
-  page.drawText("TVA non applicable, article 293 B du Code General des Impots.", {
-    x: MARGIN, y, size: 8, font: fontRegular, color: LIGHT_GRAY,
-  });
+  const ttcW = fontBold.widthOfTextAtSize(ttcEur, 12);
+  page.drawText(ttcEur, { x: col4X - ttcW - 10, y, size: 12, font: fontBold, color: PRIMARY });
 
   // Payment info
   y -= 25;
