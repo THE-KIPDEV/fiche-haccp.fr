@@ -3,6 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+function track(name: string, data?: Record<string, unknown>) {
+  if (typeof window !== "undefined" && (window as any).kipstats?.event) {
+    (window as any).kipstats.event(name, data || {});
+  }
+}
+
 export function RegisterForm() {
   const router = useRouter();
   const [error, setError] = useState("");
@@ -48,6 +54,7 @@ export function RegisterForm() {
         return;
       }
 
+      track("signup", {});
       router.push("/tableau-de-bord");
     } catch {
       setError("Erreur de connexion. Veuillez réessayer.");

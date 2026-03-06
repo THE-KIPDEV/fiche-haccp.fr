@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { TarifFreeCTA, TarifProCTA } from "@/components/TarifsCTAs";
 
 export const metadata: Metadata = {
   title: "Tarifs – Abonnement gestion HACCP restaurant à 20€/mois",
@@ -67,12 +68,7 @@ export default function TarifsPage() {
             <p className="text-gray-500 mb-6">Pour télécharger les fiches HACCP</p>
             <p className="text-4xl font-extrabold mb-1">0€</p>
             <p className="text-sm text-gray-500 mb-8">pour toujours</p>
-            <Link
-              href="/inscription"
-              className="block text-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold px-6 py-3 rounded-lg transition-colors mb-8"
-            >
-              S&apos;inscrire gratuitement
-            </Link>
+            <TarifFreeCTA />
             <ul className="space-y-3">
               {FREE_FEATURES.map((f, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm">
@@ -92,12 +88,7 @@ export default function TarifsPage() {
             <p className="text-gray-500 mb-6">Gestion HACCP complète</p>
             <p className="text-4xl font-extrabold mb-1 text-primary">20€</p>
             <p className="text-sm text-gray-500 mb-8">par mois · sans engagement</p>
-            <Link
-              href="/inscription"
-              className="block text-center bg-primary hover:bg-primary-light text-white font-semibold px-6 py-3 rounded-lg transition-colors mb-8"
-            >
-              Commencer maintenant
-            </Link>
+            <TarifProCTA />
             <ul className="space-y-3">
               {PRO_FEATURES.map((f, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm">

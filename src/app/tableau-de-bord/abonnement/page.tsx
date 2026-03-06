@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bell, Lock } from "lucide-react";
 
+function track(name: string, data?: Record<string, unknown>) {
+  if (typeof window !== "undefined" && (window as any).kipstats?.event) {
+    (window as any).kipstats.event(name, data || {});
+  }
+}
+
 interface UserInfo {
   subscription_status: string;
   billing_name?: string;
@@ -116,6 +122,7 @@ export default function AbonnementPage() {
 
   async function handleSubscribe() {
     setCheckoutLoading(true);
+    track("checkout_started", { plan: "pro", price: 2000 });
     try {
       const res = await fetch("/api/checkout", { method: "POST" });
       const data = await res.json();

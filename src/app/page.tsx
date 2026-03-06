@@ -2,6 +2,7 @@ import Link from "next/link";
 import { FICHES, CATEGORIES } from "@/lib/fiches";
 import { FicheCard } from "@/components/FicheCard";
 import { UpgradeBanner } from "@/components/UpgradeBanner";
+import { HeroCTAs, SectionCTA } from "@/components/HeroCTAs";
 import { Scale, Shield, BarChart3, Thermometer, SprayCan, Users, Bell } from "lucide-react";
 
 const FAQ_ITEMS = [
@@ -71,20 +72,7 @@ export default function HomePage() {
               Relevés de température, traçabilité, nettoyage, réception marchandises&hellip;
               Les fiches que l&apos;inspecteur sanitaire attend dans votre classeur.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/inscription"
-                className="bg-c-accent hover:bg-c-accent-dark text-gray-900 font-bold px-8 py-4 rounded-lg text-lg transition-colors shadow-lg"
-              >
-                Télécharger les fiches
-              </Link>
-              <Link
-                href="/fiches-haccp"
-                className="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-lg border border-white/20 transition-colors"
-              >
-                Voir toutes les fiches
-              </Link>
-            </div>
+            <HeroCTAs />
             <p className="text-sm text-emerald-200 mt-4">Téléchargement libre, sans engagement.</p>
           </div>
         </section>
@@ -202,12 +190,7 @@ export default function HomePage() {
             </div>
 
             <div className="text-center mt-8">
-              <Link
-                href="/inscription"
-                className="inline-block bg-c-brand hover:bg-c-brand-light text-white font-semibold px-8 py-3 rounded-lg transition-colors"
-              >
-                Essayer gratuitement
-              </Link>
+              <SectionCTA />
               <p className="text-xs text-gray-500 mt-2">20 €/mois pour la gestion complète, sans engagement</p>
             </div>
           </div>

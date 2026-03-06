@@ -1,4 +1,12 @@
+"use client";
+
 import Link from "next/link";
+
+function track(name: string, data?: Record<string, unknown>) {
+  if (typeof window !== "undefined" && (window as any).kipstats?.event) {
+    (window as any).kipstats.event(name, data || {});
+  }
+}
 
 export function UpgradeBanner() {
   return (
@@ -14,12 +22,14 @@ export function UpgradeBanner() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/inscription"
+            onClick={() => track("cta_click", { cta: "upgrade_banner_inscription" })}
             className="bg-c-accent hover:bg-c-accent-dark text-gray-900 font-bold px-8 py-3 rounded-lg transition-colors text-lg"
           >
             Essayer gratuitement
           </Link>
           <Link
             href="/tarifs"
+            onClick={() => track("cta_click", { cta: "upgrade_banner_tarifs" })}
             className="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-3 rounded-lg transition-colors border border-white/20"
           >
             Voir les tarifs
